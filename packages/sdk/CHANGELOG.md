@@ -1,5 +1,12 @@
 # @kalguard/sdk
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - kalguard/core@1.1.0
+
 ## 0.1.1
 
 ### Patch Changes
