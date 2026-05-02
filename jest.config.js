@@ -3,7 +3,11 @@ export default {
   preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   extensionsToTreatAsEsm: ['.ts'],
-  moduleNameMapper: { '^(\\.{1,2}/.*)\\.js$': '$1' },
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+    '^kalguard/core$': '<rootDir>/packages/core/src/index.ts',
+    '^kalguard/sdk$': '<rootDir>/packages/sdk/src/index.ts',
+  },
   testMatch: ['**/test/**/*.test.ts'],
   collectCoverageFrom: ['packages/*/src/**/*.ts'],
   coveragePathIgnorePatterns: ['/node_modules/', '/dist/', '/test/', '/cmd/'],

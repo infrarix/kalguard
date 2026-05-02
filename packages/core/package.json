@@ -31,5 +31,27 @@
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10"
-  }
+  },
+  "keywords": [
+    "kalguard",
+    "kalguard-core",
+    "ai-agent",
+    "security",
+    "policy-engine",
+    "prompt-firewall",
+    "tool-mediation",
+    "agent-identity",
+    "audit-log",
+    "zero-trust"
+  ],
+  "homepage": "https://infrarix.github.io/kalguard/",
+  "bugs": {
+    "url": "https://github.com/infrarix/kalguard/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/infrarix/kalguard.git",
+    "directory": "packages/core"
+  },
+  "author": "KalGuard Contributors"
 }

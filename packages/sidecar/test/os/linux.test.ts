@@ -1,5 +1,5 @@
 /**
- * Copyright 2025 AARSP Contributors
+ * Copyright 2025 KalGuard Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ describe('Linux OS enforcement', () => {
   });
 
   it('validates AppArmor config', () => {
-    expect(validateAppArmorConfig({ profile: 'aarsp-sidecar' })).toBe(true);
+    expect(validateAppArmorConfig({ profile: 'kalguard-sidecar' })).toBe(true);
     expect(validateAppArmorConfig({ profile: '' })).toBe(false);
   });
 
@@ -52,8 +52,8 @@ describe('Linux OS enforcement', () => {
   });
 
   it('returns Docker AppArmor flags', () => {
-    const flags = dockerAppArmorFlags({ profile: 'aarsp-sidecar' });
-    expect(flags).toEqual(['--security-opt', 'apparmor=aarsp-sidecar']);
+    const flags = dockerAppArmorFlags({ profile: 'kalguard-sidecar' });
+    expect(flags).toEqual(['--security-opt', 'apparmor=kalguard-sidecar']);
   });
 
   it('DEFAULT_SECCOMP_ALLOWED_SYSCALLS includes common syscalls', () => {

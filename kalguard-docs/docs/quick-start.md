@@ -24,7 +24,7 @@ This guide takes you from zero to a running KalGuard sidecar with a secured agen
 pnpm add kalguard
 ```
 
-This installs the umbrella package which re-exports `@kalguard/core`, `@kalguard/sdk`, and the sidecar launcher.
+This installs the umbrella package which re-exports `kalguard/core`, `kalguard/sdk`, and the sidecar launcher.
 
 :::tip
 You can also install packages individually — see the [Installation Guide](/docs/installation).
@@ -76,7 +76,7 @@ export KALGUARD_TOKEN_SECRET=$(openssl rand -hex 32)
 export KALGUARD_POLICY_PATH=./policy.json
 
 # Start the sidecar (default port 9292)
-pnpm --filter @kalguard/sidecar start
+pnpm --filter kalguard/sidecar start
 ```
 
 You should see:
@@ -89,7 +89,7 @@ You should see:
 ## 4. Create an Agent Token
 
 ```typescript
-import { createAgentToken } from '@kalguard/core';
+import { createAgentToken } from 'kalguard/core';
 
 const token = createAgentToken('dev-agent', ['prompt:send', 'tool:execute'], {
   secret: process.env.KALGUARD_TOKEN_SECRET!,

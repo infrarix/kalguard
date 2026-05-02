@@ -219,7 +219,7 @@ const mockClient = {
 Point the client at a real sidecar loaded with a test policy:
 
 ```bash
-KALGUARD_POLICY_PATH=./test-policy.json pnpm --filter @kalguard/sidecar start &
+KALGUARD_POLICY_PATH=./test-policy.json pnpm --filter kalguard/sidecar start &
 pnpm test
 ```
 

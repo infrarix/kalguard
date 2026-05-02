@@ -14,7 +14,7 @@ export KALGUARD_POLICY_PATH=./deploy/policy.example.json
 export KALGUARD_AUDIT_LOG_PATH=./audit.log
 export KALGUARD_POLICY_DEFAULT_DENY=true
 
-pnpm --filter @kalguard/sidecar start
+pnpm --filter kalguard/sidecar start
 ```
 
 Sidecar listens on `http://0.0.0.0:9292` by default.
@@ -117,6 +117,6 @@ cp new-policy.json /etc/kalguard/policy.json
 Generate an OCI-compatible seccomp profile for Docker or containerd:
 
 ```bash
-pnpm --filter @kalguard/sidecar seccomp-profile ./seccomp.json
+pnpm --filter kalguard/sidecar seccomp-profile ./seccomp.json
 docker run --security-opt seccomp=./seccomp.json ... kalguard-sidecar
 ```

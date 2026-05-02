@@ -1,5 +1,5 @@
 import { MemoryAuditLog, FileAuditLog } from '../../src/storage/audit.js';
-import type { AuditEntry } from '@kalguard/core';
+import type { AuditEntry } from 'kalguard/core';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';

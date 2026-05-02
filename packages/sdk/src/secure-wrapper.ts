@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import type { PromptMessage } from '@kalguard/core';
+import type { PromptMessage } from 'kalguard/core';
 import type { KalGuardClient } from './client.js';
 
 /**

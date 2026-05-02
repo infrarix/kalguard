@@ -24,9 +24,31 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@kalguard/core": "workspace:*"
+    "kalguard/core": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "kalguard",
+    "kalguard-sdk",
+    "ai-agent",
+    "security",
+    "prompt-firewall",
+    "tool-mediation",
+    "policy",
+    "zero-trust",
+    "llm",
+    "sdk"
+  ],
+  "homepage": "https://infrarix.github.io/kalguard/",
+  "bugs": {
+    "url": "https://github.com/infrarix/kalguard/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/infrarix/kalguard.git",
+    "directory": "packages/sdk"
+  },
+  "author": "KalGuard Contributors"
 }
