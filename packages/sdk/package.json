@@ -1,6 +1,6 @@
 {
-  "name": "@kalguard/sdk",
-  "version": "0.1.1",
+  "name": "kalguard/sdk",
+  "version": "1.0.0",
   "description": "KalGuard SDK - one-line secure integration for AI agents (prompt check, tool check)",
   "license": "Apache-2.0",
   "type": "module",
