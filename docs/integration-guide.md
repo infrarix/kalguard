@@ -272,7 +272,7 @@ Replace `agent_abc123` with the `agentId` (token `sub` claim) your agent uses. F
 ## Checklist
 
 - [ ] Sidecar running and reachable (e.g. `http://localhost:9292`, or your deployment URL).
-- [ ] Agent has a token signed with `AARSP_TOKEN_SECRET` and policy allows its `agentId` for `prompt:check` and `tool:execute`.
+- [ ] Agent has a token signed with `KALGUARD_TOKEN_SECRET` and policy allows its `agentId` for `prompt:check` and `tool:execute`.
 - [ ] Before **every** LLM call: call `POST /v1/prompt/check` (or `withPromptCheck`); if denied, do not call the LLM.
 - [ ] Before **every** tool call: call `POST /v1/tool/check` (or `withToolCheck`); if denied, do not run the tool.
 - [ ] Use sanitized messages when KalGuard returns them in the prompt-check response.

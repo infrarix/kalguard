@@ -1,6 +1,33 @@
-# KalGuard — AI Agent Runtime Security Platform
+<p align="center">
+  <a href="https://github.com/infrarix/kalguard">
+    <img src="https://raw.githubusercontent.com/infrarix/kalguard/main/kalguard-docs/static/img/logo.png" alt="KalGuard" width="140" />
+  </a>
+</p>
 
-**Enterprise-grade, open-source, framework-agnostic security layer for AI agents.**
+<h1 align="center">KalGuard</h1>
+
+<p align="center">
+  <strong>Enterprise-grade, open-source, framework-agnostic runtime security for AI agents.</strong>
+  <br />
+  Zero Trust · Fail-Closed · Sidecar-deployed
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/kalguard"><img alt="npm" src="https://img.shields.io/npm/v/kalguard.svg?color=blue" /></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-brightgreen.svg" /></a>
+  <a href="https://nodejs.org"><img alt="Node" src="https://img.shields.io/badge/node-%3E%3D20-339933.svg?logo=node.js&logoColor=white" /></a>
+  <a href="https://github.com/infrarix/kalguard/actions"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/infrarix/kalguard/ci.yml?branch=main" /></a>
+  <a href="https://github.com/infrarix/kalguard/issues"><img alt="Issues" src="https://img.shields.io/github/issues/infrarix/kalguard.svg" /></a>
+</p>
+
+<p align="center">
+  <a href="https://infrarix.github.io/kalguard/"><strong>Documentation</strong></a> ·
+  <a href="https://infrarix.github.io/kalguard/docs/quick-start"><strong>Quick Start</strong></a> ·
+  <a href="https://infrarix.github.io/kalguard/docs/integration/overview"><strong>Integration</strong></a> ·
+  <a href="https://infrarix.github.io/kalguard/docs/concepts/architecture"><strong>Architecture</strong></a>
+</p>
+
+---
 
 Copyright 2025 KalGuard Contributors. Licensed under the [Apache License, Version 2.0](LICENSE).
 
@@ -20,9 +47,9 @@ pnpm add kalguard
 # or: npm install kalguard
 
 # Scoped packages (optional)
-pnpm add @kalguard/sdk      # SDK only
-pnpm add @kalguard/core     # Types, policy engine, agent identity, prompt firewall, tool mediation
-pnpm add @kalguard/sidecar  # Sidecar CLI (run the proxy)
+pnpm add kalguard/sdk      # SDK only
+pnpm add kalguard/core     # Types, policy engine, agent identity, prompt firewall, tool mediation
+pnpm add kalguard/sidecar  # Sidecar CLI (run the proxy)
 ```
 
 ## Quick Start
@@ -34,7 +61,7 @@ pnpm add @kalguard/sidecar  # Sidecar CLI (run the proxy)
 pnpm install
 pnpm run build
 pnpm start
-# Or run sidecar package only: pnpm --filter @kalguard/sidecar start
+# Or run sidecar package only: pnpm --filter kalguard/sidecar start
 # Optional: set KALGUARD_TOKEN_SECRET, KALGUARD_POLICY_PATH, KALGUARD_AUDIT_LOG_PATH
 ```
 
@@ -82,9 +109,9 @@ This repo is a **pnpm workspace** with **Turbo**. Packages:
 | Package | Description | Publish |
 |---------|-------------|---------|
 | **kalguard** | Main entry — re-exports SDK (branding) | `npm install kalguard` |
-| **@kalguard/sdk** | SDK: KalGuardClient, withPromptCheck, withToolCheck | `npm install @kalguard/sdk` |
-| **@kalguard/core** | Core: types, policy, agent, prompt firewall, tools | `npm install @kalguard/core` |
-| **@kalguard/sidecar** | Sidecar CLI + server | `npm install @kalguard/sidecar` |
+| **kalguard/sdk** | SDK: KalGuardClient, withPromptCheck, withToolCheck | `npm install kalguard/sdk` |
+| **kalguard/core** | Core: types, policy, agent, prompt firewall, tools | `npm install kalguard/core` |
+| **kalguard/sidecar** | Sidecar CLI + server | `npm install kalguard/sidecar` |
 
 ```bash
 pnpm install
@@ -99,10 +126,10 @@ See **[Publishing](docs/publishing.md)** for npm publish and versioning.
 
 ```
 packages/
-├── aarsp/           # Main package (re-exports SDK) — npm install kalguard (folder named aarsp for compatibility)
-├── core/            # @kalguard/core — types, policy, agent, prompt, tools, runtime, monitoring
-├── sdk/             # @kalguard/sdk — KalGuardClient, withPromptCheck, withToolCheck
-└── sidecar/         # @kalguard/sidecar — HTTP sidecar server + CLI
+├── kalguard/        # Main package (re-exports SDK) — npm install kalguard
+├── core/            # kalguard/core — types, policy, agent, prompt, tools, runtime, monitoring
+├── sdk/             # kalguard/sdk — KalGuardClient, withPromptCheck, withToolCheck
+└── sidecar/         # kalguard/sidecar — HTTP sidecar server + CLI
 docs/                # Architecture, integration, security, deployment, publishing
 deploy/              # Docker, Kubernetes, systemd
 examples/            # Simple agent example

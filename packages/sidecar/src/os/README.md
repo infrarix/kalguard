@@ -1,6 +1,6 @@
 # OS-Level Enforcement (Optional Extension)
 
-Copyright 2025 AARSP Contributors. Licensed under the Apache License, Version 2.0.
+Copyright 2025 KalGuard Contributors. Licensed under the Apache License, Version 2.0.
 
 Implemented OS-level enforcement (config + helpers):
 

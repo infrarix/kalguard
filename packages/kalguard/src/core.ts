@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export * from '@kalguard/core';
+export * from 'kalguard/core';

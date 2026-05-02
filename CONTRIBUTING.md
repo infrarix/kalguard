@@ -55,9 +55,9 @@ This project is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By partic
 
 ```
 packages/
-  core/       → @kalguard/core     (policy engine, prompt firewall, agent identity, tool mediator)
-  sdk/        → @kalguard/sdk      (lightweight client & secure wrappers)
-  sidecar/    → @kalguard/sidecar  (HTTP sidecar server, sandbox, OS enforcement)
+  core/       → kalguard/core     (policy engine, prompt firewall, agent identity, tool mediator)
+  sdk/        → kalguard/sdk      (lightweight client & secure wrappers)
+  sidecar/    → kalguard/sidecar  (HTTP sidecar server, sandbox, OS enforcement)
   kalguard/   → kalguard           (umbrella re-export package)
 ```
 
@@ -156,9 +156,9 @@ Scopes must match a package or area in the monorepo:
 
 | Scope      | Description                         |
 | ---------- | ----------------------------------- |
-| `core`     | `@kalguard/core` package            |
-| `sdk`      | `@kalguard/sdk` package             |
-| `sidecar`  | `@kalguard/sidecar` package         |
+| `core`     | `kalguard/core` package            |
+| `sdk`      | `kalguard/sdk` package             |
+| `sidecar`  | `kalguard/sidecar` package         |
 | `kalguard` | `kalguard` umbrella package         |
 | `docs`     | Documentation & Docusaurus site     |
 | `release`  | Release-related changes             |

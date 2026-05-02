@@ -16,7 +16,7 @@
 
 import { watch } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { parsePolicyDocument, PolicyEngine } from '@kalguard/core';
+import { parsePolicyDocument, PolicyEngine } from 'kalguard/core';
 
 export interface PolicyWatchOptions {
   readonly policyPath: string;

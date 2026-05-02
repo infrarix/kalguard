@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import type { SecurityResponse } from '@kalguard/core';
+import type { SecurityResponse } from 'kalguard/core';
 
 /** Never expose raw errors to agents; always return structured security responses. */
 export function securityResponse<T>(
