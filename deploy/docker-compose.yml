@@ -1,0 +1,54 @@
+# Copyright 2025 KalGuard Contributors. Licensed under the Apache License, Version 2.0.
+# Run from repo root: docker compose -f deploy/docker-compose.yml up --build
+services:
+  kalguard-sidecar:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: kalguard-sidecar:latest
+    container_name: kalguard-sidecar
+    ports:
+      - '127.0.0.1:9292:9292'
+    environment:
+      KALGUARD_HOST: '0.0.0.0'
+      KALGUARD_PORT: '9292'
+      KALGUARD_POLICY_PATH: '/policy/policy.json'
+      KALGUARD_AUDIT_LOG_PATH: '/var/log/kalguard/audit.log'
+      KALGUARD_POLICY_DEFAULT_DENY: 'true'
+      KALGUARD_POLICY_WATCH: 'true'
+      KALGUARD_PROMPT_BLOCK_THRESHOLD: '70'
+      KALGUARD_PROMPT_SANITIZE_THRESHOLD: '50'
+      NODE_ENV: 'production'
+    env_file:
+      - path: ../.env
+        required: false
+    secrets:
+      - kalguard_token_secret
+    volumes:
+      - ./policy.example.json:/policy/policy.json:ro
+      - kalguard-audit:/var/log/kalguard
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '-O', '-', 'http://localhost:9292/health']
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
+
+volumes:
+  kalguard-audit:
+    driver: local
+
+secrets:
+  kalguard_token_secret:
+    environment: KALGUARD_TOKEN_SECRET

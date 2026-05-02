@@ -1,0 +1,52 @@
+{
+  "name": "kalguard-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "KalGuard - AI Agent Runtime Security Platform monorepo",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AKsHaT123456A/kalguard.git"
+  },
+  "homepage": "https://github.com/AKsHaT123456A/kalguard#readme",
+  "bugs": {
+    "url": "https://github.com/AKsHaT123456A/kalguard/issues"
+  },
+  "packageManager": "pnpm@9.14.2",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules npx jest --coverage",
+    "lint": "turbo run lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "start": "pnpm --filter @kalguard/sidecar start",
+    "seccomp-profile": "pnpm --filter @kalguard/sidecar seccomp-profile",
+    "prepare": "husky",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
+    "changeset:autogenerate": "node .github/changeset-autogenerate.mjs",
+    "release": "pnpm build && pnpm changeset:publish"
+  },
+  "lint-staged": {
+    "*.{ts,js,json,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.6.0",
+    "@changesets/cli": "^2.31.0",
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.3",
+    "turbo": "^2.3.0"
+  }
+}

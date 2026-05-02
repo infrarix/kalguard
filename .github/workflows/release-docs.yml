@@ -1,0 +1,59 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'kalguard-docs/**'
+      - 'docs/**'
+  workflow_dispatch:
+
+jobs:
+  deploy-docs:
+    name: Build & Deploy Docusaurus
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        run: npm install -g pnpm@9
+
+      - name: Install dependencies & build docs
+        run: |
+          cd kalguard-docs
+          pnpm install
+          pnpm run build
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "github-actions@github.com"
+          git config --local user.name "GitHub Actions"
+
+      - name: Deploy to gh-pages
+        run: |
+          mkdir -p /tmp/docs-build
+          shopt -s dotglob
+          cp -r kalguard-docs/build/* /tmp/docs-build/
+          shopt -u dotglob
+          git stash push || true
+          git checkout gh-pages || git checkout -b gh-pages
+          rm -rf *
+          cp -r /tmp/docs-build/* .
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add . -f
+            git commit -m "chore(docs): deploy documentation to gh-pages"
+            git push origin gh-pages --force
+          else
+            echo "No documentation changes to deploy"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

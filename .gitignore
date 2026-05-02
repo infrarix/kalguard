@@ -1,0 +1,56 @@
+# Node
+node_modules/
+.npm/
+.pnpm/
+
+# Docusaurus build output
+build/
+.cache/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+
+# VSCode
+.vscode/
+
+# Mac system files
+*.DS_Store
+
+# IDE
+.idea/
+
+# Misc
+*.log
+*.tgz
+
+# Coverage
+coverage/
+
+# Local config
+*.local.js
+*.local.ts
+
+# Static site output
+kalguard-docs/build/
+
+# Ignore lockfiles (if not checked in)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Turbo build cache
+.turbo/
+
+# Build outputs
+**/dist/
