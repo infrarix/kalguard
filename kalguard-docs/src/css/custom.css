@@ -31,6 +31,14 @@
   --kg-card-bg: #ffffff;
   --kg-card-border: rgba(0, 0, 0, 0.06);
   --kg-text-muted: #64748b;
+
+  /* Per-feature accent palette (used by landing page feature cards) */
+  --kg-accent-blue:    #3b82f6;
+  --kg-accent-violet:  #8b5cf6;
+  --kg-accent-rose:    #f43f5e;
+  --kg-accent-cyan:    #06b6d4;
+  --kg-accent-amber:   #f59e0b;
+  --kg-accent-emerald: #10b981;
 }
 
 [data-theme='dark'] {
@@ -48,6 +56,13 @@
   --kg-card-bg: #1e293b;
   --kg-card-border: rgba(255, 255, 255, 0.06);
   --kg-text-muted: #94a3b8;
+
+  --kg-accent-blue:    #60a5fa;
+  --kg-accent-violet:  #a78bfa;
+  --kg-accent-rose:    #fb7185;
+  --kg-accent-cyan:    #22d3ee;
+  --kg-accent-amber:   #fbbf24;
+  --kg-accent-emerald: #34d399;
 }
 
 /* ═══════════════════════════════════════
@@ -254,80 +269,6 @@ pre code {
 }
 
 /* ═══════════════════════════════════════
-   Landing Page — Feature Grid (global)
-   ═══════════════════════════════════════ */
-
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.feature-card {
-  padding: 1.75rem;
-  border-radius: 0.75rem;
-  background: var(--kg-card-bg);
-  border: 1px solid var(--kg-card-border);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-}
-
-[data-theme='dark'] .feature-card:hover {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-}
-
-.feature-icon {
-  width: 48px;
-  height: 48px;
-  background: var(--kg-gradient);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-  font-size: 1.25rem;
-}
-
-.feature-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 0.4rem;
-}
-
-.feature-description {
-  color: var(--kg-text-muted);
-  line-height: 1.6;
-  font-size: 0.925rem;
-}
-
-/* ═══════════════════════════════════════
-   Landing Page — CTA Button (global)
-   ═══════════════════════════════════════ */
-
-.cta-button {
-  display: inline-block;
-  background: var(--kg-gradient);
-  color: white;
-  padding: 0.75rem 1.75rem;
-  border-radius: 0.625rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
-}
-
-.cta-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.35);
-  color: white;
-  text-decoration: none;
-}
-
-/* ═══════════════════════════════════════
    Scrollbar
    ═══════════════════════════════════════ */
 
@@ -349,18 +290,3 @@ pre code {
   background: rgba(100, 116, 139, 0.5);
 }
 
-/* ═══════════════════════════════════════
-   Responsive
-   ═══════════════════════════════════════ */
-
-@media (max-width: 768px) {
-  .feature-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 996px) {
-  .feature-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
