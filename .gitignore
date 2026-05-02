@@ -47,7 +47,6 @@ kalguard-docs/build/
 # Ignore lockfiles (if not checked in)
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
 
 # Turbo build cache
 .turbo/

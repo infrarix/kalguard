@@ -6,11 +6,11 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AKsHaT123456A/kalguard.git"
+    "url": "https://github.com/infrarix/kalguard.git"
   },
-  "homepage": "https://github.com/AKsHaT123456A/kalguard#readme",
+  "homepage": "https://github.com/infrarix/kalguard#readme",
   "bugs": {
-    "url": "https://github.com/AKsHaT123456A/kalguard/issues"
+    "url": "https://github.com/infrarix/kalguard/issues"
   },
   "packageManager": "pnpm@9.14.2",
   "engines": {
