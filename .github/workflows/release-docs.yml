@@ -3,10 +3,6 @@ name: Deploy Documentation
 on:
   push:
     branches: [main]
-    paths:
-      - 'kalguard-docs/**'
-      - 'docs/**'
-  workflow_dispatch:
 
 jobs:
   deploy-docs:
