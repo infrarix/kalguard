@@ -1,6 +1,6 @@
 {
   "name": "kalguard/sidecar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "KalGuard Sidecar - HTTP proxy for prompt firewall, tool mediation, and policy enforcement",
   "license": "Apache-2.0",
   "type": "module",
