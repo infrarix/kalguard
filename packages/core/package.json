@@ -1,6 +1,6 @@
 {
   "name": "@kalguard/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "KalGuard core - types, policy engine, agent identity, prompt firewall, tool mediation",
   "license": "Apache-2.0",
   "type": "module",
