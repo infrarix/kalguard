@@ -1,7 +1,7 @@
 import { KalGuardClient } from '../src/client.js';
 import { withPromptCheck, withToolCheck } from '../src/secure-wrapper.js';
 import { createServer } from 'node:http';
-import type { Server, IncomingMessage, ServerResponse } from 'node:http';
+import type { Server, IncomingMessage } from 'node:http';
 
 /** Fake sidecar HTTP server for testing the SDK client */
 function createFakeServer(handler: (req: IncomingMessage, body: string) => { status: number; body: unknown }): Server {

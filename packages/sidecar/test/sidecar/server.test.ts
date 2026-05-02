@@ -1,7 +1,7 @@
-import { createServer, request as httpRequest } from 'node:http';
-import type { Server, IncomingMessage, ServerResponse } from 'node:http';
+import { request as httpRequest } from 'node:http';
+import type { Server } from 'node:http';
 import { createSidecarServer } from '../../src/sidecar/server.js';
-import { PolicyEngine, parsePolicyDocument, ToolMediator, createAgentToken } from '@kalguard/core';
+import { PolicyEngine, ToolMediator, createAgentToken } from '@kalguard/core';
 import type { PolicyDocument, ToolAllowlistEntry } from '@kalguard/core';
 import { MemoryAuditLog } from '../../src/storage/audit.js';
 import type { SidecarConfig } from '../../src/config/schema.js';
