@@ -58,7 +58,7 @@ packages/
   core/       → @kalguard/core     (policy engine, prompt firewall, agent identity, tool mediator)
   sdk/        → @kalguard/sdk      (lightweight client & secure wrappers)
   sidecar/    → @kalguard/sidecar  (HTTP sidecar server, sandbox, OS enforcement)
-  aarsp/      → kalguard           (umbrella re-export package)
+  kalguard/   → kalguard           (umbrella re-export package)
 ```
 
 ### Useful Commands

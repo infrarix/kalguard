@@ -33,15 +33,6 @@ importers:
         specifier: ^2.3.0
         version: 2.8.1
 
-  packages/aarsp:
-    dependencies:
-      '@kalguard/core':
-        specifier: workspace:*
-        version: link:../core
-      '@kalguard/sdk':
-        specifier: workspace:*
-        version: link:../sdk
-
   packages/core:
     dependencies:
       jsonwebtoken:
@@ -51,6 +42,15 @@ importers:
       '@types/jsonwebtoken':
         specifier: ^9.0.10
         version: 9.0.10
+
+  packages/kalguard:
+    dependencies:
+      '@kalguard/core':
+        specifier: workspace:*
+        version: link:../core
+      '@kalguard/sdk':
+        specifier: workspace:*
+        version: link:../sdk
 
   packages/sdk:
     dependencies:

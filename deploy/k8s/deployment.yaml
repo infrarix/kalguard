@@ -71,7 +71,7 @@ spec:
               mountPath: /policy
               readOnly: true
             - name: audit-log
-              mountPath: /var/log/aarsp
+              mountPath: /var/log/kalguard
           resources:
             requests:
               memory: '64Mi'

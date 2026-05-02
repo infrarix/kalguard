@@ -15,7 +15,7 @@ COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY packages/core/package.json ./packages/core/
 COPY packages/sdk/package.json ./packages/sdk/
 COPY packages/sidecar/package.json ./packages/sidecar/
-COPY packages/aarsp/package.json ./packages/aarsp/
+COPY packages/kalguard/package.json ./packages/kalguard/
 
 # Install all deps (including dev for build)
 RUN pnpm install --frozen-lockfile
@@ -27,8 +27,8 @@ COPY packages/sdk/src ./packages/sdk/src
 COPY packages/sdk/tsconfig.json ./packages/sdk/
 COPY packages/sidecar/src ./packages/sidecar/src
 COPY packages/sidecar/tsconfig.json ./packages/sidecar/
-COPY packages/aarsp/src ./packages/aarsp/src
-COPY packages/aarsp/tsconfig.json ./packages/aarsp/
+COPY packages/kalguard/src ./packages/kalguard/src
+COPY packages/kalguard/tsconfig.json ./packages/kalguard/
 COPY tsconfig.json turbo.json ./
 
 # Build all packages in dependency order via turbo
@@ -49,7 +49,7 @@ COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY packages/core/package.json ./packages/core/
 COPY packages/sdk/package.json ./packages/sdk/
 COPY packages/sidecar/package.json ./packages/sidecar/
-COPY packages/aarsp/package.json ./packages/aarsp/
+COPY packages/kalguard/package.json ./packages/kalguard/
 
 # Install production deps only
 RUN pnpm install --frozen-lockfile --prod
@@ -58,7 +58,7 @@ RUN pnpm install --frozen-lockfile --prod
 COPY --from=builder /app/packages/core/dist ./packages/core/dist
 COPY --from=builder /app/packages/sdk/dist ./packages/sdk/dist
 COPY --from=builder /app/packages/sidecar/dist ./packages/sidecar/dist
-COPY --from=builder /app/packages/aarsp/dist ./packages/aarsp/dist
+COPY --from=builder /app/packages/kalguard/dist ./packages/kalguard/dist
 
 # Create audit log dir and set permissions
 RUN mkdir -p /var/log/kalguard && chown kalguard:kalguard /var/log/kalguard

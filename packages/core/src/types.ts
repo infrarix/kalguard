@@ -15,7 +15,7 @@
  */
 
 /**
- * Shared types and trust boundaries for AARSP.
+ * Shared types and trust boundaries for KalGuard.
  * Agent identity is explicitly separate from user identity.
  */
 

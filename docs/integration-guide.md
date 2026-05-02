@@ -275,7 +275,7 @@ Replace `agent_abc123` with the `agentId` (token `sub` claim) your agent uses. F
 - [ ] Agent has a token signed with `AARSP_TOKEN_SECRET` and policy allows its `agentId` for `prompt:check` and `tool:execute`.
 - [ ] Before **every** LLM call: call `POST /v1/prompt/check` (or `withPromptCheck`); if denied, do not call the LLM.
 - [ ] Before **every** tool call: call `POST /v1/tool/check` (or `withToolCheck`); if denied, do not run the tool.
-- [ ] Use sanitized messages when AARSP returns them in the prompt-check response.
+- [ ] Use sanitized messages when KalGuard returns them in the prompt-check response.
 - [ ] On deny, log/handle structured response (`message`, `errorCode`, `requestId`); never expose raw internals to the agent.
 
 For more detail, see [Architecture](architecture.md) and [Security assumptions](security-assumptions.md).
