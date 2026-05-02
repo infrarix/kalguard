@@ -46,7 +46,7 @@ jobs:
             git commit -m "chore(docs): deploy documentation to gh-pages"
             git push origin gh-pages --force
           else
-            echo "No documentation changes to deploy"
+            echo "No documentation changes to deploy in repo"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
