@@ -1,5 +1,4 @@
 import { securityResponse, jsonResponse } from '../../src/api/response.js';
-import { PassThrough } from 'node:stream';
 import type { ServerResponse } from 'node:http';
 
 describe('securityResponse', () => {

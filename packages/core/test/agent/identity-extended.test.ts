@@ -30,7 +30,7 @@ describe('Agent identity - extended coverage', () => {
 
   it('returns null for token with future iat (decode-only)', () => {
     // Create a token with iat in the future
-    const futureIat = Math.floor(Date.now() / 1000) + 100_000;
+    // const futureIat = Math.floor(Date.now() / 1000) + 100_000;
     const token = jwt.sign({ capabilities: [], metadata: {} }, secret, {
       subject: 'agent-1',
       issuer: 'test',

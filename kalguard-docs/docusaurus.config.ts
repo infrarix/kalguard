@@ -15,14 +15,14 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://kalguard.dev',
+  url: 'https://infrarix.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/kalguard/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'kalguard', // Usually your GitHub org/user name.
+  organizationName: 'infrarix', // Usually your GitHub org/user name.
   projectName: 'kalguard', // Usually your repo name.
 
   onBrokenLinks: 'throw',
@@ -42,7 +42,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           editUrl:
-            'https://github.com/kalguard/kalguard/tree/main/kalguard-docs/',
+            'https://github.com/infrarix/kalguard/tree/main/kalguard-docs/',
         },
         blog: {
           showReadingTime: true,
@@ -51,7 +51,7 @@ const config: Config = {
             xslt: true,
           },
           editUrl:
-            'https://github.com/kalguard/kalguard/tree/main/kalguard-docs/',
+            'https://github.com/infrarix/kalguard/tree/main/kalguard-docs/',
           onInlineTags: 'ignore',
           onInlineAuthors: 'ignore',
           onUntruncatedBlogPosts: 'ignore',
@@ -83,7 +83,7 @@ const config: Config = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/kalguard/kalguard',
+          href: 'https://github.com/infrarix/kalguard',
           label: 'GitHub',
           position: 'right',
         },
@@ -131,15 +131,15 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/kalguard/kalguard',
+              href: 'https://github.com/infrarix/kalguard',
             },
             {
               label: 'Issues',
-              href: 'https://github.com/kalguard/kalguard/issues',
+              href: 'https://github.com/infrarix/kalguard/issues',
             },
             {
               label: 'Discussions',
-              href: 'https://github.com/kalguard/kalguard/discussions',
+              href: 'https://github.com/infrarix/kalguard/discussions',
             },
           ],
         },
@@ -152,11 +152,11 @@ const config: Config = {
             },
             {
               label: 'Changelog',
-              href: 'https://github.com/kalguard/kalguard/releases',
+              href: 'https://github.com/infrarix/kalguard/releases',
             },
             {
               label: 'License',
-              href: 'https://github.com/kalguard/kalguard/blob/main/LICENSE',
+              href: 'https://github.com/infrarix/kalguard/blob/main/LICENSE',
             },
           ],
         },

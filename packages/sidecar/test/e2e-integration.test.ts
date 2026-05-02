@@ -5,7 +5,7 @@
  * 3. Use SDK client to check prompts and tools through sidecar
  * 4. Verify allow/deny decisions match expectations
  */
-import { createServer } from 'node:http';
+
 import type { Server } from 'node:http';
 import { createSidecarServer } from '../src/sidecar/server.js';
 import { PolicyEngine, ToolMediator, createAgentToken } from '@kalguard/core';
