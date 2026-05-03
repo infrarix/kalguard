@@ -5,8 +5,8 @@ export default {
   extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
-    '^kalguard/core$': '<rootDir>/packages/core/src/index.ts',
-    '^kalguard/sdk$': '<rootDir>/packages/sdk/src/index.ts',
+    '^kalguard-core$': '<rootDir>/packages/core/src/index.ts',
+    '^kalguard-sdk$': '<rootDir>/packages/sdk/src/index.ts',
   },
   testMatch: ['**/test/**/*.test.ts'],
   collectCoverageFrom: ['packages/*/src/**/*.ts'],

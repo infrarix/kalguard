@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import type { SecurityResponse, PromptMessage } from 'kalguard/core';
+import type { SecurityResponse, PromptMessage } from 'kalguard-core';
 
 export interface KalGuardClientOptions {
   readonly baseUrl: string;

@@ -40,9 +40,9 @@ if (commitPatterns.major.test(commitMessage)) {
 
 // Scope → npm package name mapping
 const scopeToPackage = {
-  core: 'kalguard/core',
-  sdk: 'kalguard/sdk',
-  sidecar: 'kalguard/sidecar',
+  core: 'kalguard-core',
+  sdk: 'kalguard-sdk',
+  sidecar: 'kalguard-sidecar',
   kalguard: 'kalguard',
 };
 

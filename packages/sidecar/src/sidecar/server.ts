@@ -17,14 +17,14 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { randomBytes } from 'node:crypto';
 import type { SidecarConfig } from '../config/schema.js';
-import { validateAgentToken, checkCapability } from 'kalguard/core';
-import type { AgentIdentity } from 'kalguard/core';
-import { evaluatePrompt } from 'kalguard/core';
-import type { PromptMessage, ToolInvocation } from 'kalguard/core';
-import { PolicyEngine } from 'kalguard/core';
-import type { PolicyContext } from 'kalguard/core';
-import { ToolMediator } from 'kalguard/core';
-import { createSecurityEvent, toAuditEntry } from 'kalguard/core';
+import { validateAgentToken, checkCapability } from 'kalguard-core';
+import type { AgentIdentity } from 'kalguard-core';
+import { evaluatePrompt } from 'kalguard-core';
+import type { PromptMessage, ToolInvocation } from 'kalguard-core';
+import { PolicyEngine } from 'kalguard-core';
+import type { PolicyContext } from 'kalguard-core';
+import { ToolMediator } from 'kalguard-core';
+import { createSecurityEvent, toAuditEntry } from 'kalguard-core';
 import type { IAuditLog } from '../storage/audit.js';
 import { securityResponse, jsonResponse } from '../api/response.js';
 

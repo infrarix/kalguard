@@ -189,7 +189,7 @@ Agents need a **short-lived token** signed with the same secret the sidecar uses
 Your auth service or API gateway issues a token per agent (or per session) and sets the same secret in the sidecar:
 
 ```ts
-import { createAgentToken, generateAgentId } from 'kalguard/core';
+import { createAgentToken, generateAgentId } from 'kalguard-core';
 
 const agentId = generateAgentId(); // or your stable agent ID
 const token = createAgentToken(

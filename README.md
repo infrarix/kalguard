@@ -47,9 +47,9 @@ pnpm add kalguard
 # or: npm install kalguard
 
 # Scoped packages (optional)
-pnpm add kalguard/sdk      # SDK only
-pnpm add kalguard/core     # Types, policy engine, agent identity, prompt firewall, tool mediation
-pnpm add kalguard/sidecar  # Sidecar CLI (run the proxy)
+pnpm add kalguard-sdk      # SDK only
+pnpm add kalguard-core     # Types, policy engine, agent identity, prompt firewall, tool mediation
+pnpm add kalguard-sidecar  # Sidecar CLI (run the proxy)
 ```
 
 ## Quick Start
@@ -61,7 +61,7 @@ pnpm add kalguard/sidecar  # Sidecar CLI (run the proxy)
 pnpm install
 pnpm run build
 pnpm start
-# Or run sidecar package only: pnpm --filter kalguard/sidecar start
+# Or run sidecar package only: pnpm --filter kalguard-sidecar start
 # Optional: set KALGUARD_TOKEN_SECRET, KALGUARD_POLICY_PATH, KALGUARD_AUDIT_LOG_PATH
 ```
 
@@ -100,7 +100,7 @@ See **[Integration guide](docs/integration-guide.md)** for step-by-step integrat
 
 ### 4. Agent tokens
 
-Use the provided token utilities to issue short-lived agent tokens (`import { createAgentToken } from 'kalguard/core'`). Tokens are signed with HMAC-SHA256; set `KALGUARD_TOKEN_SECRET` on the sidecar to verify.
+Use the provided token utilities to issue short-lived agent tokens (`import { createAgentToken } from 'kalguard-core'`). Tokens are signed with HMAC-SHA256; set `KALGUARD_TOKEN_SECRET` on the sidecar to verify.
 
 ## Monorepo (pnpm + Turbo)
 
@@ -109,9 +109,9 @@ This repo is a **pnpm workspace** with **Turbo**. Packages:
 | Package | Description | Publish |
 |---------|-------------|---------|
 | **kalguard** | Main entry — re-exports SDK (branding) | `npm install kalguard` |
-| **kalguard/sdk** | SDK: KalGuardClient, withPromptCheck, withToolCheck | `npm install kalguard/sdk` |
-| **kalguard/core** | Core: types, policy, agent, prompt firewall, tools | `npm install kalguard/core` |
-| **kalguard/sidecar** | Sidecar CLI + server | `npm install kalguard/sidecar` |
+| **kalguard-sdk** | SDK: KalGuardClient, withPromptCheck, withToolCheck | `npm install kalguard-sdk` |
+| **kalguard-core** | Core: types, policy, agent, prompt firewall, tools | `npm install kalguard-core` |
+| **kalguard-sidecar** | Sidecar CLI + server | `npm install kalguard-sidecar` |
 
 ```bash
 pnpm install
@@ -127,9 +127,9 @@ See **[Publishing](docs/publishing.md)** for npm publish and versioning.
 ```
 packages/
 ├── kalguard/        # Main package (re-exports SDK) — npm install kalguard
-├── core/            # kalguard/core — types, policy, agent, prompt, tools, runtime, monitoring
-├── sdk/             # kalguard/sdk — KalGuardClient, withPromptCheck, withToolCheck
-└── sidecar/         # kalguard/sidecar — HTTP sidecar server + CLI
+├── core/            # kalguard-core — types, policy, agent, prompt, tools, runtime, monitoring
+├── sdk/             # kalguard-sdk — KalGuardClient, withPromptCheck, withToolCheck
+└── sidecar/         # kalguard-sidecar — HTTP sidecar server + CLI
 docs/                # Architecture, integration, security, deployment, publishing
 deploy/              # Docker, Kubernetes, systemd
 examples/            # Simple agent example

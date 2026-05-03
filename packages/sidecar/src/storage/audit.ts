@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import type { AuditEntry } from 'kalguard/core';
+import type { AuditEntry } from 'kalguard-core';
 import { appendFile, mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
 

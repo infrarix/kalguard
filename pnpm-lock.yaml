@@ -60,22 +60,22 @@ importers:
 
   packages/kalguard:
     dependencies:
-      kalguard/core:
+      kalguard-core:
         specifier: workspace:*
         version: link:../core
-      kalguard/sdk:
+      kalguard-sdk:
         specifier: workspace:*
         version: link:../sdk
 
   packages/sdk:
     dependencies:
-      kalguard/core:
+      kalguard-core:
         specifier: workspace:*
         version: link:../core
 
   packages/sidecar:
     dependencies:
-      kalguard/core:
+      kalguard-core:
         specifier: workspace:*
         version: link:../core
       zod:

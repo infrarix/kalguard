@@ -169,7 +169,7 @@ The sidecar will poll the policy file and reload when it detects a change.
 ### Validation
 
 ```typescript
-import { validatePolicy } from 'kalguard/core';
+import { validatePolicy } from 'kalguard-core';
 
 const errors = validatePolicy(policyJson);
 if (errors.length > 0) {
@@ -180,7 +180,7 @@ if (errors.length > 0) {
 ### Testing Rules Programmatically
 
 ```typescript
-import { PolicyEngine } from 'kalguard/core';
+import { PolicyEngine } from 'kalguard-core';
 
 const engine = new PolicyEngine(policy);
 const result = engine.evaluate({

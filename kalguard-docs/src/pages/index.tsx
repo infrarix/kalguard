@@ -701,7 +701,7 @@ pnpm add kalguard
 export KALGUARD_TOKEN_SECRET=$(openssl rand -hex 32)
 
 # Start the sidecar
-pnpm --filter kalguard/sidecar start`;
+pnpm --filter kalguard-sidecar start`;
 
 const INTEGRATE_CODE = `import { KalGuardClient, withPromptCheck } from 'kalguard';
 

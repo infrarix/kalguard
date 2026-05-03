@@ -1,4 +1,4 @@
-# @kalguard/sidecar
+# kalguard-sidecar
 
 ## 1.0.1
 
@@ -12,4 +12,4 @@
 ### Patch Changes
 
 - Updated dependencies []:
-  - @kalguard/core@0.2.0
+  - kalguard-core@0.2.0
