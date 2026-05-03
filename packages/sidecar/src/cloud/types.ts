@@ -57,6 +57,5 @@ export const OFFLINE_LICENSE: LicenseInfo = {
     features: [],
   },
   expiresAt: new Date(0).toISOString(),
-  tokenSigningSecret: undefined,
-  revokedTokenHashes: [],
+  // tokenSigningSecret and revokedTokenHashes are omitted (not undefined) per exactOptionalPropertyTypes
 };

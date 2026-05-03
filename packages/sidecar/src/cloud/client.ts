@@ -41,7 +41,7 @@ export class KalGuardCloudClient {
         return OFFLINE_LICENSE;
       }
 
-      return {
+      const licenseInfo: LicenseInfo = {
         valid: data.valid,
         tier: parseTier(data.tier),
         orgId: String(data.orgId ?? ''),
@@ -52,9 +52,12 @@ export class KalGuardCloudClient {
           features: Array.isArray(data.limits?.features) ? data.limits.features.map(String) : [],
         },
         expiresAt: String(data.expiresAt ?? new Date(0).toISOString()),
-        tokenSigningSecret: typeof data.tokenSigningSecret === 'string' ? data.tokenSigningSecret : undefined,
-        revokedTokenHashes: Array.isArray(data.revokedTokenHashes) ? data.revokedTokenHashes.map(String) : [],
+        // Only include optional properties when they have defined values (exactOptionalPropertyTypes)
+        ...(typeof data.tokenSigningSecret === 'string' && { tokenSigningSecret: data.tokenSigningSecret }),
+        ...(Array.isArray(data.revokedTokenHashes) && { revokedTokenHashes: data.revokedTokenHashes.map(String) }),
       };
+
+      return licenseInfo;
     } catch {
       return OFFLINE_LICENSE;
     }
