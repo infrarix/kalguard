@@ -1,5 +1,11 @@
 # kalguard-core
 
+## 1.2.0
+
+### Minor Changes
+
+- Merge pull request [#14](https://github.com/AKsHaT123456A/kalguard/issues/14) from infrarix/dev
+
 ## 1.1.1
 
 ### Patch Changes
