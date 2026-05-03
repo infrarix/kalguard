@@ -1,5 +1,5 @@
 {
-  "name": "kalguard/sdk",
+  "name": "kalguard-sdk",
   "version": "1.0.0",
   "description": "KalGuard SDK - one-line secure integration for AI agents (prompt check, tool check)",
   "license": "Apache-2.0",
@@ -24,7 +24,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "kalguard/core": "workspace:*"
+    "kalguard-core": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

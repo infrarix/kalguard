@@ -36,9 +36,9 @@ If you discover a security vulnerability in KalGuard, please report it responsib
 
 The following are in scope for security reports:
 
-- **kalguard/core** — Policy engine bypass, prompt firewall evasion, token validation flaws
-- **kalguard/sdk** — Authentication bypass, credential leakage
-- **kalguard/sidecar** — HTTP server vulnerabilities, sandbox escape, audit log tampering
+- **kalguard-core** — Policy engine bypass, prompt firewall evasion, token validation flaws
+- **kalguard-sdk** — Authentication bypass, credential leakage
+- **kalguard-sidecar** — HTTP server vulnerabilities, sandbox escape, audit log tampering
 - **kalguard** — Any re-export that masks a vulnerability
 
 ### Out of Scope

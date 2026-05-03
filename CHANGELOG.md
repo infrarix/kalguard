@@ -8,7 +8,7 @@ This project uses [Changesets](https://github.com/changesets/changesets) for aut
 
 ### 🎉 Initial Release
 
-#### kalguard/core
+#### kalguard-core
 - Policy engine with first-match rule evaluation and fail-closed defaults
 - Prompt firewall with 12 injection detection patterns and risk scoring
 - Agent identity system with JWT-based short-lived tokens and capability scoping
@@ -16,12 +16,12 @@ This project uses [Changesets](https://github.com/changesets/changesets) for aut
 - Security event monitoring and immutable audit entry generation
 - Request-scoped runtime context
 
-#### kalguard/sdk
+#### kalguard-sdk
 - Lightweight `KalGuardClient` for sidecar integration
 - `withPromptCheck()` and `withToolCheck()` secure wrappers
 - Structured error handling with error codes and request IDs
 
-#### kalguard/sidecar
+#### kalguard-sidecar
 - HTTP sidecar server with prompt check and tool check endpoints
 - Zod-validated configuration from environment variables
 - Policy file hot-reload with debounced file watching
@@ -32,4 +32,4 @@ This project uses [Changesets](https://github.com/changesets/changesets) for aut
 
 #### kalguard (umbrella)
 - Re-exports `KalGuardClient`, `withPromptCheck`, `withToolCheck` from SDK
-- Re-exports all core types and utilities via `kalguard/core`
+- Re-exports all core types and utilities via `kalguard-core`

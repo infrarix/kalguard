@@ -1,6 +1,6 @@
 # Agent Instructions — KalGuard
 
-**KalGuard** is an enterprise-grade, open-source AI agent runtime security platform. This is a **pnpm workspace + Turbo monorepo** with 4 packages: `kalguard/core`, `kalguard/sdk`, `kalguard/sidecar`, and `kalguard` (umbrella).
+**KalGuard** is an enterprise-grade, open-source AI agent runtime security platform. This is a **pnpm workspace + Turbo monorepo** with 4 packages: `kalguard-core`, `kalguard-sdk`, `kalguard-sidecar`, and `kalguard` (umbrella).
 
 ## Quick Start
 
@@ -14,7 +14,7 @@ pnpm format           # Prettier format (committed files MUST be formatted)
 ```
 
 **Development:**
-- Build single package: `pnpm --filter kalguard/core build`
+- Build single package: `pnpm --filter kalguard-core build`
 - Watch mode: Not configured (manual rebuild)
 - Clean: `pnpm clean` (removes `dist/` + `node_modules/`)
 
@@ -60,10 +60,10 @@ Commits failing this format will be rejected by `husky` pre-commit hook.
 
 | Package | Purpose | Depends On |
 |---------|---------|------------|
-| **kalguard/core** | Policy engine, prompt firewall, agent identity, tool mediator | None |
-| **kalguard/sdk** | `KalGuardClient`, `withPromptCheck`, `withToolCheck` | `kalguard/core` |
-| **kalguard/sidecar** | HTTP server + CLI (`kalguard-sidecar` bin) | `kalguard/core` |
-| **kalguard** | Umbrella package (re-exports SDK for branding) | `kalguard/sdk`, `kalguard/core` |
+| **kalguard-core** | Policy engine, prompt firewall, agent identity, tool mediator | None |
+| **kalguard-sdk** | `KalGuardClient`, `withPromptCheck`, `withToolCheck` | `kalguard-core` |
+| **kalguard-sidecar** | HTTP server + CLI (`kalguard-sidecar` bin) | `kalguard-core` |
+| **kalguard** | Umbrella package (re-exports SDK for branding) | `kalguard-sdk`, `kalguard-core` |
 
 **Data flow:** Agent → Sidecar HTTP (`POST /v1/prompt/check` or `/v1/tool/check`) → Policy Engine → Prompt Firewall / Tool Mediator → Audit Log → `SecurityResponse`
 

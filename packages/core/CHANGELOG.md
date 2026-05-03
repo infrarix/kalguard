@@ -1,4 +1,4 @@
-# @kalguard/core
+# kalguard-core
 
 ## 0.2.0
 

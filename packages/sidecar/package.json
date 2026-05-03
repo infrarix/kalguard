@@ -1,5 +1,5 @@
 {
-  "name": "kalguard/sidecar",
+  "name": "kalguard-sidecar",
   "version": "1.0.0",
   "description": "KalGuard Sidecar - HTTP proxy for prompt firewall, tool mediation, and policy enforcement",
   "license": "Apache-2.0",
@@ -21,7 +21,7 @@
     "seccomp-profile": "node dist/cmd/seccomp-profile.js"
   },
   "dependencies": {
-    "kalguard/core": "workspace:*",
+    "kalguard-core": "workspace:*",
     "zod": "^3.23.8"
   },
   "publishConfig": {

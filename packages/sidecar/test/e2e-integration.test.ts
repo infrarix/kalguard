@@ -8,8 +8,8 @@
 
 import type { Server } from 'node:http';
 import { createSidecarServer } from '../src/sidecar/server.js';
-import { PolicyEngine, ToolMediator, createAgentToken } from 'kalguard/core';
-import type { PolicyDocument, ToolAllowlistEntry } from 'kalguard/core';
+import { PolicyEngine, ToolMediator, createAgentToken } from 'kalguard-core';
+import type { PolicyDocument, ToolAllowlistEntry } from 'kalguard-core';
 import { MemoryAuditLog } from '../src/storage/audit.js';
 import { KalGuardClient } from '../../sdk/src/client.js';
 import { withPromptCheck, withToolCheck } from '../../sdk/src/secure-wrapper.js';

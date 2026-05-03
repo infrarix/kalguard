@@ -32,13 +32,13 @@ KalGuard follows a **sidecar pattern**: the security layer runs as an independen
 
 | Component | Package | Responsibility |
 |-----------|---------|---------------|
-| **Policy Engine** | `kalguard/core` | Evaluates requests against a declarative JSON rule set. First-match semantics; fail-closed default. |
-| **Prompt Firewall** | `kalguard/core` | Scores prompt risk (0–1), detects injection patterns, redacts PII, filters harmful content. |
-| **Tool Mediator** | `kalguard/core` | Validates tool names and arguments against registered schemas; enforces allowlists and rate limits. |
-| **Agent Identity** | `kalguard/core` | Issues and verifies short-lived JWT tokens scoped to specific agent capabilities. |
-| **Audit Logger** | `kalguard/sidecar` | Writes every decision as a structured, append-only JSON record. |
-| **Sidecar Server** | `kalguard/sidecar` | HTTP server that ties all components together and exposes the `/v1/` API. |
-| **SDK Client** | `kalguard/sdk` | TypeScript client with `withPromptCheck()` and `withToolCheck()` helpers. |
+| **Policy Engine** | `kalguard-core` | Evaluates requests against a declarative JSON rule set. First-match semantics; fail-closed default. |
+| **Prompt Firewall** | `kalguard-core` | Scores prompt risk (0–1), detects injection patterns, redacts PII, filters harmful content. |
+| **Tool Mediator** | `kalguard-core` | Validates tool names and arguments against registered schemas; enforces allowlists and rate limits. |
+| **Agent Identity** | `kalguard-core` | Issues and verifies short-lived JWT tokens scoped to specific agent capabilities. |
+| **Audit Logger** | `kalguard-sidecar` | Writes every decision as a structured, append-only JSON record. |
+| **Sidecar Server** | `kalguard-sidecar` | HTTP server that ties all components together and exposes the `/v1/` API. |
+| **SDK Client** | `kalguard-sdk` | TypeScript client with `withPromptCheck()` and `withToolCheck()` helpers. |
 
 ## Request Flow
 

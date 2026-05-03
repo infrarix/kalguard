@@ -16,8 +16,8 @@
 
 import { readFile } from 'node:fs/promises';
 import { loadSidecarConfig, startPolicyWatch } from '../config/index.js';
-import { PolicyEngine, parsePolicyDocument, ToolMediator } from 'kalguard/core';
-import type { PolicyDocument, ToolAllowlistEntry } from 'kalguard/core';
+import { PolicyEngine, parsePolicyDocument, ToolMediator } from 'kalguard-core';
+import type { PolicyDocument, ToolAllowlistEntry } from 'kalguard-core';
 import { FileAuditLog, MemoryAuditLog } from '../storage/audit.js';
 import { createSidecarServer } from '../sidecar/server.js';
 

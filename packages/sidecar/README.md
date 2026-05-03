@@ -4,7 +4,7 @@
   </a>
 </p>
 
-<h1 align="center">kalguard/sidecar</h1>
+<h1 align="center">kalguard-sidecar</h1>
 
 <p align="center">
   <strong>The KalGuard sidecar — an HTTP proxy that mediates every prompt and tool call your AI agent makes.</strong>
@@ -13,8 +13,8 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/kalguard/sidecar"><img alt="npm" src="https://img.shields.io/npm/v/kalguard/sidecar.svg?color=blue" /></a>
-  <a href="https://www.npmjs.com/package/kalguard/sidecar"><img alt="downloads" src="https://img.shields.io/npm/dm/kalguard/sidecar.svg" /></a>
+  <a href="https://www.npmjs.com/package/kalguard-sidecar"><img alt="npm" src="https://img.shields.io/npm/v/kalguard-sidecar.svg?color=blue" /></a>
+  <a href="https://www.npmjs.com/package/kalguard-sidecar"><img alt="downloads" src="https://img.shields.io/npm/dm/kalguard-sidecar.svg" /></a>
   <a href="https://github.com/infrarix/kalguard/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-brightgreen.svg" /></a>
   <a href="https://nodejs.org"><img alt="Node" src="https://img.shields.io/badge/node-%3E%3D20-339933.svg?logo=node.js&logoColor=white" /></a>
   <img alt="types" src="https://img.shields.io/badge/types-included-3178C6.svg?logo=typescript&logoColor=white" />
@@ -34,10 +34,10 @@ The sidecar is the enforcement plane of KalGuard. Run it next to your agent — 
 
 ```bash
 # Project-local
-npm install kalguard/sidecar
+npm install kalguard-sidecar
 
 # Or global (CLI use)
-npm install -g kalguard/sidecar
+npm install -g kalguard-sidecar
 ```
 
 This installs the `kalguard-sidecar` binary plus the `seccomp-profile` helper.
@@ -69,7 +69,7 @@ KALGUARD_AUDIT_LOG_PATH=/var/log/kalguard/audit.jsonl \
 
 ## HTTP API
 
-Every request requires `Authorization: Bearer <agent-token>`. Tokens are HMAC-signed; sign and verify them with [`kalguard/core`][core].
+Every request requires `Authorization: Bearer <agent-token>`. Tokens are HMAC-signed; sign and verify them with [`kalguard-core`][core].
 
 ### `POST /v1/prompt/check`
 
@@ -171,7 +171,7 @@ First match wins. Any error during evaluation returns *deny* with a structured r
 
 ## Deployment recipes
 
-- **Docker**: see [`deploy/docker`](https://github.com/infrarix/kalguard/tree/main/deploy/docker) for an `image: kalguard/sidecar` example.
+- **Docker**: see [`deploy/docker`](https://github.com/infrarix/kalguard/tree/main/deploy/docker) for an `image: kalguard-sidecar` example.
 - **Kubernetes**: see [`deploy/kubernetes`](https://github.com/infrarix/kalguard/tree/main/deploy/kubernetes) for sidecar-pattern manifests.
 - **systemd**: see [`deploy/systemd`](https://github.com/infrarix/kalguard/tree/main/deploy/systemd) for a hardened unit file.
 
@@ -186,7 +186,7 @@ Generate a seccomp profile pinned to the syscalls KalGuard actually uses:
 ```bash
 kalguard-sidecar # to start the server
 # In another shell:
-npx kalguard/sidecar seccomp-profile ./seccomp.json
+npx kalguard-sidecar seccomp-profile ./seccomp.json
 ```
 
 See [`packages/sidecar/src/os/README.md`](https://github.com/infrarix/kalguard/blob/main/packages/sidecar/src/os/README.md) for AppArmor and macOS sandbox-exec recipes.
@@ -204,13 +204,13 @@ The sandbox runner executes tool commands with a timeout, an allowlisted environ
 ## Related packages
 
 - [`kalguard`][umbrella] — umbrella package; recommended client install.
-- [`kalguard/sdk`][sdk] — typed HTTP client used by your agent.
-- [`kalguard/core`][core] — primitives the sidecar is built on.
+- [`kalguard-sdk`][sdk] — typed HTTP client used by your agent.
+- [`kalguard-core`][core] — primitives the sidecar is built on.
 
 ## License
 
 [Apache-2.0](https://github.com/infrarix/kalguard/blob/main/LICENSE) © KalGuard Contributors
 
 [umbrella]: https://www.npmjs.com/package/kalguard
-[sdk]: https://www.npmjs.com/package/kalguard/sdk
-[core]: https://www.npmjs.com/package/kalguard/core
+[sdk]: https://www.npmjs.com/package/kalguard-sdk
+[core]: https://www.npmjs.com/package/kalguard-core

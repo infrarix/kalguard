@@ -4,15 +4,15 @@
   </a>
 </p>
 
-<h1 align="center">kalguard/sdk</h1>
+<h1 align="center">kalguard-sdk</h1>
 
 <p align="center">
   <strong>One-line TypeScript client for mediating prompts and tool calls through the KalGuard sidecar.</strong>
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/kalguard/sdk"><img alt="npm" src="https://img.shields.io/npm/v/kalguard/sdk.svg?color=blue" /></a>
-  <a href="https://www.npmjs.com/package/kalguard/sdk"><img alt="downloads" src="https://img.shields.io/npm/dm/kalguard/sdk.svg" /></a>
+  <a href="https://www.npmjs.com/package/kalguard-sdk"><img alt="npm" src="https://img.shields.io/npm/v/kalguard-sdk.svg?color=blue" /></a>
+  <a href="https://www.npmjs.com/package/kalguard-sdk"><img alt="downloads" src="https://img.shields.io/npm/dm/kalguard-sdk.svg" /></a>
   <a href="https://github.com/infrarix/kalguard/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-brightgreen.svg" /></a>
   <a href="https://nodejs.org"><img alt="Node" src="https://img.shields.io/badge/node-%3E%3D20-339933.svg?logo=node.js&logoColor=white" /></a>
   <img alt="types" src="https://img.shields.io/badge/types-included-3178C6.svg?logo=typescript&logoColor=white" />
@@ -26,27 +26,27 @@
 
 ---
 
-`kalguard/sdk` is the lightweight HTTP client agents use to talk to the KalGuard sidecar. It exposes a typed client (`KalGuardClient`) plus two convenience wrappers (`withPromptCheck`, `withToolCheck`) that turn security mediation into a single line of code.
+`kalguard-sdk` is the lightweight HTTP client agents use to talk to the KalGuard sidecar. It exposes a typed client (`KalGuardClient`) plus two convenience wrappers (`withPromptCheck`, `withToolCheck`) that turn security mediation into a single line of code.
 
-> Most users should install the umbrella [`kalguard`](https://www.npmjs.com/package/kalguard) package, which re-exports everything in this SDK. Install `kalguard/sdk` directly if you want to pin only the client surface.
+> Most users should install the umbrella [`kalguard`](https://www.npmjs.com/package/kalguard) package, which re-exports everything in this SDK. Install `kalguard-sdk` directly if you want to pin only the client surface.
 
 ## Install
 
 ```bash
-npm install kalguard/sdk
+npm install kalguard-sdk
 # or
-pnpm add kalguard/sdk
+pnpm add kalguard-sdk
 ```
 
 You also need:
 
-- A running [`kalguard/sidecar`](https://www.npmjs.com/package/kalguard/sidecar) reachable over HTTP.
-- An agent bearer token signed with the sidecar's `KALGUARD_TOKEN_SECRET`. Issue one with `createAgentToken(...)` from [`kalguard/core`](https://www.npmjs.com/package/kalguard/core).
+- A running [`kalguard-sidecar`](https://www.npmjs.com/package/kalguard-sidecar) reachable over HTTP.
+- An agent bearer token signed with the sidecar's `KALGUARD_TOKEN_SECRET`. Issue one with `createAgentToken(...)` from [`kalguard-core`](https://www.npmjs.com/package/kalguard-core).
 
 ## Quick Start
 
 ```ts
-import { KalGuardClient, withPromptCheck, withToolCheck } from 'kalguard/sdk';
+import { KalGuardClient, withPromptCheck, withToolCheck } from 'kalguard-sdk';
 
 const guard = new KalGuardClient({
   baseUrl: 'http://localhost:9292',
@@ -131,8 +131,8 @@ Treat denials as **terminal** — never silently fall through to an unguarded pa
 ## Related packages
 
 - [`kalguard`](https://www.npmjs.com/package/kalguard) — umbrella package; re-exports this SDK.
-- [`kalguard/core`](https://www.npmjs.com/package/kalguard/core) — types, policy engine, prompt firewall, token utilities.
-- [`kalguard/sidecar`](https://www.npmjs.com/package/kalguard/sidecar) — the HTTP server this client talks to.
+- [`kalguard-core`](https://www.npmjs.com/package/kalguard-core) — types, policy engine, prompt firewall, token utilities.
+- [`kalguard-sidecar`](https://www.npmjs.com/package/kalguard-sidecar) — the HTTP server this client talks to.
 
 ## License
 

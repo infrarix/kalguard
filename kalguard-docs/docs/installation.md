@@ -38,18 +38,18 @@ The `kalguard` package re-exports everything from the three sub-packages:
 
 | Package | Purpose |
 |---------|---------|
-| `kalguard/core` | Types, policy engine, prompt firewall, agent identity |
-| `kalguard/sdk` | Client SDK for agent integration |
-| `kalguard/sidecar` | HTTP sidecar server |
+| `kalguard-core` | Types, policy engine, prompt firewall, agent identity |
+| `kalguard-sdk` | Client SDK for agent integration |
+| `kalguard-sidecar` | HTTP sidecar server |
 
 ### Individual Packages
 
 ```bash
 # Only the SDK (smallest footprint for agent code)
-pnpm add kalguard/sdk
+pnpm add kalguard-sdk
 
 # Only the core library
-pnpm add kalguard/core
+pnpm add kalguard-core
 ```
 
 ## Docker
@@ -99,7 +99,7 @@ Start the sidecar from the built output:
 ```bash
 export KALGUARD_TOKEN_SECRET=$(openssl rand -hex 32)
 export KALGUARD_POLICY_PATH=./deploy/policy.example.json
-pnpm --filter kalguard/sidecar start
+pnpm --filter kalguard-sidecar start
 ```
 
 ## Post-Install Configuration

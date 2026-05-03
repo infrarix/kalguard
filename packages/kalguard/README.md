@@ -29,9 +29,9 @@
 
 ---
 
-`kalguard` is the umbrella package — install it once and you get the SDK with the friendliest possible import path. Under the hood it re-exports the [`kalguard/sdk`][sdk] client so you can wire prompts and tool calls through the [KalGuard sidecar][sidecar] in one line.
+`kalguard` is the umbrella package — install it once and you get the SDK with the friendliest possible import path. Under the hood it re-exports the [`kalguard-sdk`][sdk] client so you can wire prompts and tool calls through the [KalGuard sidecar][sidecar] in one line.
 
-> If you want lower-level building blocks (policy engine, prompt firewall, agent identity) without the sidecar, install [`kalguard/core`][core] directly.
+> If you want lower-level building blocks (policy engine, prompt firewall, agent identity) without the sidecar, install [`kalguard-core`][core] directly.
 
 ## Why KalGuard
 
@@ -54,11 +54,11 @@ yarn add kalguard
 You will also need the sidecar running somewhere reachable. The fastest path:
 
 ```bash
-npm install -g kalguard/sidecar
+npm install -g kalguard-sidecar
 KALGUARD_TOKEN_SECRET=$(openssl rand -hex 32) kalguard-sidecar
 ```
 
-See [`kalguard/sidecar`][sidecar] for Docker, Kubernetes, and systemd deployment recipes.
+See [`kalguard-sidecar`][sidecar] for Docker, Kubernetes, and systemd deployment recipes.
 
 ## Quick Start
 
@@ -110,7 +110,7 @@ For lower-level access, use `client.checkPrompt(...)` / `client.checkTool(...)` 
 import { KalGuardClient } from 'kalguard';
 
 // Lower-level core: policy engine, prompt firewall, token utilities
-import { PolicyEngine, evaluatePrompt, createAgentToken } from 'kalguard/core';
+import { PolicyEngine, evaluatePrompt, createAgentToken } from 'kalguard-core';
 ```
 
 ## Configuration
@@ -123,7 +123,7 @@ The client itself is stateless — all knobs live on the sidecar. The most commo
 | `KALGUARD_PORT`         | Sidecar listen port                            | `9292` |
 | `KALGUARD_POLICY_PATH`  | Path to the JSON policy file                   | *(default-deny if unset)* |
 
-See the full reference in the [`kalguard/sidecar` README][sidecar].
+See the full reference in the [`kalguard-sidecar` README][sidecar].
 
 ## Examples
 
@@ -148,6 +148,6 @@ Found a vulnerability? Please follow [`SECURITY.md`](https://github.com/infrarix
 
 [Apache-2.0](https://github.com/infrarix/kalguard/blob/main/LICENSE) © KalGuard Contributors
 
-[sdk]: https://www.npmjs.com/package/kalguard/sdk
-[core]: https://www.npmjs.com/package/kalguard/core
-[sidecar]: https://www.npmjs.com/package/kalguard/sidecar
+[sdk]: https://www.npmjs.com/package/kalguard-sdk
+[core]: https://www.npmjs.com/package/kalguard-core
+[sidecar]: https://www.npmjs.com/package/kalguard-sidecar

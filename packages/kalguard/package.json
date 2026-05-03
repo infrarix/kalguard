@@ -29,8 +29,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "kalguard/core": "workspace:*",
-    "kalguard/sdk": "workspace:*"
+    "kalguard-core": "workspace:*",
+    "kalguard-sdk": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
