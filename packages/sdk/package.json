@@ -1,6 +1,6 @@
 {
   "name": "kalguard-sdk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "KalGuard SDK - one-line secure integration for AI agents (prompt check, tool check)",
   "author": "Infrarix",
   "license": "Apache-2.0",
