@@ -1,25 +1,14 @@
-/**
- * Copyright 2025 KalGuard Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import { z } from 'zod';
 
 /** Sidecar server config. */
 export const SidecarConfigSchema = z.object({
   port: z.number().int().min(1).max(65535).default(9292),
   host: z.string().default('0.0.0.0'),
+  /**
+   * @deprecated Use dashboard-managed access tokens instead. The sidecar will receive the
+   * signing secret automatically via cloud license sync when KALGUARD_API_KEY is set.
+   * This env var is retained for local-only / self-hosted mode without KalGuard Cloud.
+   */
   tokenSecret: z.string().min(1).optional(),
   policyPath: z.string().optional(),
   policyDefaultDeny: z.boolean().default(true),
@@ -31,6 +20,12 @@ export const SidecarConfigSchema = z.object({
   promptSanitizeThreshold: z.number().min(0).max(100).default(50),
   toolRateLimitPerAgent: z.number().int().min(0).optional(),
   auditLogPath: z.string().optional(),
+  /** KalGuard Cloud API key for Pro features. If unset, runs in local-only mode. */
+  apiKey: z.string().min(1).optional(),
+  /** KalGuard Cloud API base URL. */
+  cloudBaseUrl: z.string().default('https://api.kalguard.dev'),
+  /** License refresh interval in ms (min 10s, max 10min, default 5min). */
+  cloudSyncIntervalMs: z.number().int().min(10_000).max(600_000).default(300_000),
 });
 
 export type SidecarConfig = z.infer<typeof SidecarConfigSchema>;
@@ -54,6 +49,10 @@ export function loadSidecarConfig(
       env.KALGUARD_PROMPT_SANITIZE_THRESHOLD != null ? Number(env.KALGUARD_PROMPT_SANITIZE_THRESHOLD) : 50,
     toolRateLimitPerAgent: env.KALGUARD_TOOL_RATE_LIMIT != null ? Number(env.KALGUARD_TOOL_RATE_LIMIT) : undefined,
     auditLogPath: env.KALGUARD_AUDIT_LOG_PATH,
+    apiKey: env.KALGUARD_API_KEY ?? undefined,
+    cloudBaseUrl: env.KALGUARD_CLOUD_URL ?? 'https://api.kalguard.dev',
+    cloudSyncIntervalMs:
+      env.KALGUARD_CLOUD_SYNC_INTERVAL_MS != null ? Number(env.KALGUARD_CLOUD_SYNC_INTERVAL_MS) : 300_000,
   };
   return SidecarConfigSchema.parse(raw);
 }

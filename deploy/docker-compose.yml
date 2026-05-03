@@ -22,8 +22,8 @@ services:
     env_file:
       - path: ../.env
         required: false
-    secrets:
-      - kalguard_token_secret
+    # secrets:
+    #   - kalguard_token_secret  # Deprecated: use KALGUARD_API_KEY for Cloud mode
     volumes:
       - ./policy.example.json:/policy/policy.json:ro
       - kalguard-audit:/var/log/kalguard
@@ -49,6 +49,6 @@ volumes:
   kalguard-audit:
     driver: local
 
-secrets:
-  kalguard_token_secret:
-    environment: KALGUARD_TOKEN_SECRET
+# secrets:
+#   kalguard_token_secret:
+#     environment: KALGUARD_TOKEN_SECRET  # Deprecated: use KALGUARD_API_KEY for Cloud mode

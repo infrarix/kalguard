@@ -9,7 +9,8 @@
 pnpm install
 pnpm run build
 
-export KALGUARD_TOKEN_SECRET=$(node -e "require('crypto').randomBytes(32).toString('hex') |> console.log")
+# Token signing is managed by the dashboard. For local-only mode without Cloud:
+# export KALGUARD_TOKEN_SECRET=$(openssl rand -hex 32)
 export KALGUARD_POLICY_PATH=./deploy/policy.example.json
 export KALGUARD_AUDIT_LOG_PATH=./audit.log
 export KALGUARD_POLICY_DEFAULT_DENY=true
@@ -25,7 +26,7 @@ Build and run with Docker Compose (recommended):
 
 ```bash
 # From repo root — the build context is the repo root
-KALGUARD_TOKEN_SECRET=<your-32-char-secret> \
+# KALGUARD_TOKEN_SECRET is optional when using KALGUARD_API_KEY (Cloud mode)
 docker compose -f deploy/docker-compose.yml up --build -d
 ```
 
@@ -36,7 +37,7 @@ docker build -f deploy/Dockerfile -t kalguard-sidecar .
 docker run -d \
   --name kalguard-sidecar \
   -p 127.0.0.1:9292:9292 \
-  -e KALGUARD_TOKEN_SECRET=<your-secret> \
+  -e KALGUARD_API_KEY=kg_live_your_key_here \
   -e KALGUARD_POLICY_PATH=/policy/policy.json \
   -e KALGUARD_AUDIT_LOG_PATH=/var/log/kalguard/audit.log \
   -v "$(pwd)/deploy/policy.example.json:/policy/policy.json:ro" \
@@ -85,7 +86,9 @@ sudo cp deploy/policy.example.json /etc/kalguard/policy.json
 
 # Configure secrets (never commit to VCS)
 sudo tee /etc/kalguard/env > /dev/null <<EOF
-KALGUARD_TOKEN_SECRET=$(openssl rand -hex 32)
+# KALGUARD_TOKEN_SECRET is auto-synced from the dashboard when KALGUARD_API_KEY is set.
+# For local-only mode: KALGUARD_TOKEN_SECRET=$(openssl rand -hex 32)
+KALGUARD_API_KEY=kg_live_your_key_here
 KALGUARD_POLICY_PATH=/etc/kalguard/policy.json
 KALGUARD_AUDIT_LOG_PATH=/var/log/kalguard/audit.log
 EOF

@@ -18,7 +18,7 @@ All endpoints except `/health` require a valid agent token:
 Authorization: Bearer <agent-token>
 ```
 
-Tokens are JWTs signed with `KALGUARD_TOKEN_SECRET`. See [Quick Start § Create an Agent Token](/docs/quick-start#4-create-an-agent-token).
+Tokens are JWTs signed by KalGuard. Generate them from the [KalGuard Dashboard](/docs/cloud#4-create-access-tokens) or locally with `createAgentToken()` from `kalguard-core` (for development).
 
 ---
 
@@ -31,7 +31,24 @@ Health check. No authentication required.
 **Response `200`**
 
 ```json
-{ "status": "healthy", "uptime": 123456 }
+{
+  "status": "ok",
+  "requestId": "req_abc123..."
+}
+```
+
+When connected to KalGuard Cloud, the response also includes:
+
+```json
+{
+  "status": "ok",
+  "requestId": "req_abc123...",
+  "cloud": {
+    "connected": true,
+    "tier": "pro",
+    "orgId": "org-uuid-here"
+  }
+}
 ```
 
 ---
@@ -64,30 +81,33 @@ Validate and optionally sanitize a prompt before sending it to the LLM.
 ```json
 {
   "allowed": true,
+  "decision": "allow",
+  "message": "OK",
+  "requestId": "req_abc123...",
   "data": {
+    "allowed": true,
+    "riskScore": 35,
+    "riskLevel": "low",
     "sanitizedMessages": [
       { "role": "system", "content": "You are a helpful assistant." },
       { "role": "user", "content": "Hello, my email is [EMAIL_REDACTED]" }
     ]
-  },
-  "metadata": {
-    "riskScore": 0.35,
-    "sanitized": true,
-    "redactions": ["EMAIL_REDACTED"]
   }
 }
 ```
 
-**Response `200` — Denied**
+**Response `403` — Denied**
 
 ```json
 {
   "allowed": false,
-  "message": "Prompt blocked: injection detected (score 0.92)",
-  "metadata": {
-    "riskScore": 0.92,
-    "reasons": ["injection_override"],
-    "blockedPhrases": []
+  "decision": "deny",
+  "message": "Prompt blocked",
+  "requestId": "req_abc123...",
+  "errorCode": "PROMPT_BLOCKED",
+  "data": {
+    "riskScore": 92,
+    "riskLevel": "critical"
   }
 }
 ```
@@ -103,64 +123,37 @@ Validate a tool execution against policy and registered schemas.
 ```json
 {
   "toolName": "search_web",
-  "toolArgs": { "query": "weather NYC" },
-  "context": {
-    "metadata": { "env": "production" }
-  }
+  "arguments": { "query": "weather NYC" }
 }
 ```
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `toolName` | `string` | Yes | Identifier of the tool to execute |
-| `toolArgs` | `object` | Yes | Arguments to pass to the tool |
-| `context.metadata` | `Record<string, string>` | No | Metadata for policy matching |
+| `arguments` | `object` | Yes | Arguments to pass to the tool |
 
 **Response `200` — Allowed**
 
 ```json
 {
   "allowed": true,
-  "metadata": { "policyRuleId": "allow-search", "reason": "Tool is on the allowlist" }
+  "decision": "allow",
+  "message": "OK",
+  "requestId": "req_abc123...",
+  "data": { "allowed": true }
 }
 ```
 
-**Response `200` — Denied**
+**Response `403` — Denied**
 
 ```json
 {
   "allowed": false,
+  "decision": "deny",
   "message": "Tool denied by policy",
-  "metadata": { "policyRuleId": "deny-dangerous-tools", "reason": "Tool not on allowlist" }
+  "requestId": "req_abc123...",
+  "errorCode": "TOOL_DENIED"
 }
-```
-
----
-
-### `POST /v1/tool/register`
-
-Register a JSON Schema for a tool. Once registered, all `tool:execute` requests for this tool will have their arguments validated against the schema.
-
-**Request Body**
-
-```json
-{
-  "toolName": "search_web",
-  "schema": {
-    "type": "object",
-    "properties": {
-      "query": { "type": "string", "maxLength": 500 }
-    },
-    "required": ["query"],
-    "additionalProperties": false
-  }
-}
-```
-
-**Response `200`**
-
-```json
-{ "success": true, "data": { "toolName": "search_web" } }
 ```
 
 ---
@@ -171,9 +164,10 @@ All endpoints return a consistent error shape:
 
 ```json
 {
-  "error": "Unauthorized",
-  "message": "Token expired",
-  "statusCode": 401
+  "allowed": false,
+  "message": "Unauthorized",
+  "requestId": "req_abc123...",
+  "errorCode": "AUTH_FAILED"
 }
 ```
 
@@ -187,13 +181,31 @@ All endpoints return a consistent error shape:
 
 ### Rate Limiting
 
-When `KALGUARD_TOOL_RATE_LIMIT` is configured, rate-limited responses include headers:
+Rate limiting operates at two levels:
+
+**Local rate limiting** — When `KALGUARD_TOOL_RATE_LIMIT` is configured, per-agent tool call limits are enforced by the sidecar.
+
+**Cloud rate limiting** — When connected to KalGuard Cloud, daily check limits are enforced based on your plan tier. Every response includes:
 
 ```text
-X-RateLimit-Limit: 100
-X-RateLimit-Remaining: 42
-X-RateLimit-Reset: 1714567890
+x-kalguard-plan: pro
+x-kalguard-usage-remaining: 99842
+x-ratelimit-reset: 1714694400
 ```
+
+When the limit is exceeded, the sidecar returns `429 Too Many Requests`:
+
+```json
+{
+  "allowed": false,
+  "message": "Rate limit exceeded",
+  "requestId": "req_abc123...",
+  "errorCode": "RATE_LIMIT_EXCEEDED",
+  "data": { "remaining": 0, "resetAt": 1714694400 }
+}
+```
+
+The `retry-after` header indicates seconds until the limit resets.
 
 ---
 
@@ -207,9 +219,6 @@ import { KalGuardClient } from 'kalguard';
 const client = new KalGuardClient({
   baseUrl: string;       // Sidecar URL (required)
   token: string;         // Agent JWT (required)
-  timeout?: number;      // Request timeout in ms (default: 5000)
-  retries?: number;      // Automatic retries on network errors (default: 3)
-  headers?: Record<string, string>;  // Extra headers
 });
 ```
 
@@ -217,34 +226,34 @@ const client = new KalGuardClient({
 
 | Method | Returns | Description |
 |--------|---------|-------------|
-| `client.checkPrompt({ messages, context? })` | `PromptCheckResponse` | Call `/v1/prompt/check` |
-| `client.checkTool({ toolName, toolArgs, context? })` | `ToolCheckResponse` | Call `/v1/tool/check` |
-| `client.registerTool({ toolName, schema })` | `ToolRegisterResponse` | Call `/v1/tool/register` |
+| `client.checkPrompt(messages, requestId?)` | `SecurityResponse` | Call `/v1/prompt/check` |
+| `client.checkTool(toolName, args, requestId?)` | `SecurityResponse` | Call `/v1/tool/check` |
+| `client.planInfo` | `KalGuardPlanInfo \| undefined` | Plan info from the last cloud-connected response |
+
+### Plan Info (Cloud)
+
+After each request, `client.planInfo` is populated from cloud response headers:
+
+```typescript
+const result = await client.checkPrompt(messages);
+console.log(client.planInfo);
+// { plan: 'pro', remaining: 99842, resetAt: 1714694400 }
+```
 
 ### Helper Functions
 
 ```typescript
 import { withPromptCheck, withToolCheck } from 'kalguard';
 
-// Calls handler with sanitized messages if allowed; throws KalGuardError if denied
+// Calls handler with sanitized messages if allowed; throws if denied
 const result = await withPromptCheck(client, messages, async (sanitized) => {
   return await llm.chat(sanitized);
 });
 
-// Calls handler if tool is allowed; throws KalGuardError if denied
+// Calls handler if tool is allowed; throws if denied
 const toolResult = await withToolCheck(client, 'search_web', { query: 'test' }, async () => {
   return await tools.search('test');
 });
-```
-
-### `KalGuardError`
-
-```typescript
-class KalGuardError extends Error {
-  denied: boolean;       // true if the request was explicitly denied by policy
-  statusCode: number;    // HTTP status code from the sidecar
-  metadata?: Record<string, unknown>;  // Additional context (riskScore, reasons, etc.)
-}
 ```
 
 ## Next Steps

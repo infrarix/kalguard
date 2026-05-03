@@ -54,8 +54,11 @@ yarn add kalguard
 You will also need the sidecar running somewhere reachable. The fastest path:
 
 ```bash
-npm install -g kalguard-sidecar
-KALGUARD_TOKEN_SECRET=$(openssl rand -hex 32) kalguard-sidecar
+# With KalGuard Cloud (recommended):
+KALGUARD_API_KEY=kg_live_your_key_here kalguard-sidecar
+
+# Local-only mode (deprecated):
+# KALGUARD_TOKEN_SECRET=$(openssl rand -hex 32) kalguard-sidecar
 ```
 
 See [`kalguard-sidecar`][sidecar] for Docker, Kubernetes, and systemd deployment recipes.
@@ -119,7 +122,7 @@ The client itself is stateless — all knobs live on the sidecar. The most commo
 
 | Variable | Purpose | Default |
 |----------|---------|---------|
-| `KALGUARD_TOKEN_SECRET` | HMAC secret used to sign / verify agent tokens | *(required for production)* |
+| `KALGUARD_TOKEN_SECRET` | HMAC secret for local-only mode (auto-synced from dashboard when `KALGUARD_API_KEY` is set) | *(deprecated for Cloud users)* |
 | `KALGUARD_PORT`         | Sidecar listen port                            | `9292` |
 | `KALGUARD_POLICY_PATH`  | Path to the JSON policy file                   | *(default-deny if unset)* |
 
@@ -151,3 +154,12 @@ Found a vulnerability? Please follow [`SECURITY.md`](https://github.com/infrarix
 [sdk]: https://www.npmjs.com/package/kalguard-sdk
 [core]: https://www.npmjs.com/package/kalguard-core
 [sidecar]: https://www.npmjs.com/package/kalguard-sidecar
+
+---
+
+<p align="center">
+  <img src="https://avatars.githubusercontent.com/u/281149417?s=96&v=4" width="28" />
+  <b>by Infrarix</b>
+</p>
+
+> Part of the **Infrarix AI Infrastructure ecosystem**

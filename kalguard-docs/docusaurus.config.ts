@@ -83,6 +83,11 @@ const config: Config = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
+          to: '/docs/cloud',
+          label: 'Cloud',
+          position: 'left',
+        },
+        {
           href: 'https://github.com/infrarix/kalguard',
           label: 'GitHub',
           position: 'right',
@@ -124,6 +129,10 @@ const config: Config = {
               label: 'Deployment',
               to: '/docs/deployment/overview',
             },
+            {
+              label: 'Cloud & Pricing',
+              to: '/docs/cloud',
+            },
           ],
         },
         {
@@ -161,7 +170,15 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} KalGuard Contributors. Licensed under Apache-2.0.`,
+      copyright: `
+        <div style="margin-top: 1rem;">
+          <img src="https://avatars.githubusercontent.com/u/281149417?s=96&v=4" width="28" style="vertical-align: middle; margin-right: 8px;" />
+          <strong>by Infrarix</strong> | Part of the <strong>Infrarix AI Infrastructure ecosystem</strong>
+        </div>
+        <div style="margin-top: 0.5rem;">
+          Copyright © ${new Date().getFullYear()} Infrarix. Licensed under Apache-2.0.
+        </div>
+      `,
     },
     prism: {
       theme: prismThemes.github,

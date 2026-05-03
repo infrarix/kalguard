@@ -106,13 +106,15 @@ Commits failing this format will be rejected by `husky` pre-commit hook.
 ```bash
 KALGUARD_PORT=9292                          # HTTP server port
 KALGUARD_HOST=0.0.0.0                       # Bind address
-KALGUARD_TOKEN_SECRET=<32+ char hex>        # JWT signing (required for prod)
+# KALGUARD_TOKEN_SECRET is deprecated — use dashboard-managed access tokens instead.
+# The sidecar auto-syncs the signing secret when KALGUARD_API_KEY is set.
+# For local-only mode: KALGUARD_TOKEN_SECRET=<32+ char hex>
 KALGUARD_POLICY_PATH=/path/to/policy.json   # Policy file (default: ./policy.json)
 KALGUARD_POLICY_WATCH=true                  # Hot reload policy (500ms debounce)
 KALGUARD_AUDIT_LOG_PATH=/var/log/kalguard   # Audit log directory (default: ./logs)
 ```
 
-**Critical:** `KALGUARD_TOKEN_SECRET` must be ≥32 chars hex. Generate: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
+**Note:** `KALGUARD_TOKEN_SECRET` is only needed for local-only mode (no KalGuard Cloud). When using Cloud, access tokens and the signing secret are managed via the dashboard.
 
 ## Common Pitfalls
 

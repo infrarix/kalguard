@@ -19,6 +19,8 @@ function makeConfig(overrides: Partial<SidecarConfig> = {}): SidecarConfig {
     policyWatchIntervalMs: 500,
     promptBlockThreshold: 70,
     promptSanitizeThreshold: 50,
+    cloudBaseUrl: 'https://api.kalguard.dev',
+    cloudSyncIntervalMs: 300_000,
     ...overrides,
   };
 }

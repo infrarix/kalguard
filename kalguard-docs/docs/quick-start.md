@@ -69,11 +69,14 @@ The example above is permissive for development. Always restrict policies before
 ## 3. Start the Sidecar
 
 ```bash
-# Generate a token-signing secret
-export KALGUARD_TOKEN_SECRET=$(openssl rand -hex 32)
-
 # Point at your policy file
 export KALGUARD_POLICY_PATH=./policy.json
+
+# Option A: Connect to KalGuard Cloud (recommended)
+export KALGUARD_API_KEY=kg_live_your_key_here
+
+# Option B: Local-only mode (generate a signing secret manually)
+# export KALGUARD_TOKEN_SECRET=$(openssl rand -hex 32)
 
 # Start the sidecar (default port 9292)
 pnpm --filter kalguard-sidecar start
@@ -88,13 +91,26 @@ You should see:
 
 ## 4. Create an Agent Token
 
+### From the Dashboard (recommended)
+
+1. Log in at [dashboard.kalguard.dev](https://dashboard.kalguard.dev)
+2. Go to **Access Tokens** → **Create Token**
+3. Set a name, agent ID (e.g., `dev-agent`), capabilities (`prompt:send`, `tool:execute`), and expiry
+4. Copy the token and set it in your agent's environment:
+
+```bash
+export KALGUARD_AGENT_TOKEN="eyJhbGciOiJIUzI1NiIs..."
+```
+
+### Local-only mode (development)
+
 ```typescript
 import { createAgentToken } from 'kalguard-core';
 
 const token = createAgentToken('dev-agent', ['prompt:send', 'tool:execute'], {
   secret: process.env.KALGUARD_TOKEN_SECRET!,
-  expiresInMs: 3_600_000, // 1 hour
   issuer: 'my-platform',
+  ttlSeconds: 3600,
 });
 ```
 

@@ -27,6 +27,15 @@ KalGuard follows a **sidecar pattern**: the security layer runs as an independen
                                    │  ┌───────────────────────┐   │
                                    │  │     Audit Logger      │   │
                                    │  └───────────────────────┘   │
+                                   │  ┌───────────────────────┐   │
+                                   │  │  Cloud Connector (opt)│   │
+                                   │  └───────────┬───────────┘   │
+                                   └──────────────┼───────────────┘
+                                                  │ HTTPS (optional)
+                                                  ▼
+                                   ┌───────────────────────────────┐
+                                   │  KalGuard Cloud Dashboard     │
+                                   │  (license, usage, analytics)  │
                                    └───────────────────────────────┘
 ```
 
@@ -38,7 +47,8 @@ KalGuard follows a **sidecar pattern**: the security layer runs as an independen
 | **Agent Identity** | `kalguard-core` | Issues and verifies short-lived JWT tokens scoped to specific agent capabilities. |
 | **Audit Logger** | `kalguard-sidecar` | Writes every decision as a structured, append-only JSON record. |
 | **Sidecar Server** | `kalguard-sidecar` | HTTP server that ties all components together and exposes the `/v1/` API. |
-| **SDK Client** | `kalguard-sdk` | TypeScript client with `withPromptCheck()` and `withToolCheck()` helpers. |
+| **Cloud Connector** | `kalguard-sidecar` | Optional module that validates license, enforces plan limits, and reports usage to KalGuard Cloud. |
+| **SDK Client** | `kalguard-sdk` | TypeScript client with `checkPrompt()` and `checkTool()` helpers. Exposes plan info from cloud headers. |
 
 ## Request Flow
 
@@ -60,6 +70,16 @@ KalGuard follows a **sidecar pattern**: the security layer runs as an independen
 4. Tool mediator validates arguments against the registered schema and checks rate limits.
 5. Audit record is written.
 6. Allow or deny response is returned.
+
+### Cloud Integration (Optional)
+
+When `KALGUARD_API_KEY` is configured, the sidecar connects to KalGuard Cloud:
+
+1. **Startup** — validates the API key and retrieves plan limits (checks/day, features, retention).
+2. **Per-request** — checks the cloud rate limiter before processing. Adds plan headers (`x-kalguard-plan`, `x-kalguard-usage-remaining`) to every response.
+3. **Background** — usage events are buffered and flushed to the Cloud API in batches (non-blocking, fire-and-forget).
+4. **Periodic** — the license is refreshed at the configured interval (default: 5 minutes).
+5. **Graceful degradation** — if Cloud is unreachable, the sidecar continues with the cached license or runs in local-only mode.
 
 ## Security Model
 

@@ -60,7 +60,7 @@ docker pull kalguard/sidecar:latest
 docker run -d \
   --name kalguard \
   -p 9292:9292 \
-  -e KALGUARD_TOKEN_SECRET="$(openssl rand -hex 32)" \
+  -e KALGUARD_API_KEY="kg_live_your_key_here" \
   -v "$(pwd)/policy.json:/policy/policy.json:ro" \
   -v "$(pwd)/audit:/var/log/kalguard" \
   kalguard/sidecar:latest
@@ -115,12 +115,15 @@ pnpm --filter kalguard-sidecar start
 | `KALGUARD_AUDIT_LOG_PATH` | No | `./audit.log` | Audit log file location |
 | `KALGUARD_POLICY_WATCH` | No | `false` | Hot-reload policy on file change |
 | `KALGUARD_POLICY_WATCH_INTERVAL_MS` | No | `5000` | Poll interval for policy watch |
+| `KALGUARD_API_KEY` | No | — | KalGuard Cloud API key (enables Pro features) |
+| `KALGUARD_CLOUD_URL` | No | `https://api.kalguard.dev` | Cloud API base URL |
+| `KALGUARD_CLOUD_SYNC_INTERVAL_MS` | No | `300000` | License refresh interval (ms) |
 
 ### Verify
 
 ```bash
 curl -s http://localhost:9292/health | jq .
-# {"status":"healthy","uptime":12345}
+# {"status":"ok","requestId":"req_..."}
 ```
 
 ## Platform Notes

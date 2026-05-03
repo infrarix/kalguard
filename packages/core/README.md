@@ -117,6 +117,8 @@ if (verdict.riskScore >= 70) {
 
 ### Issue and verify agent tokens
 
+> **Note:** In production, use the KalGuard Dashboard to create access tokens. The `createAgentToken` function is available for local development and advanced use cases.
+
 ```ts
 import { createAgentToken, validateAgentToken } from 'kalguard-core';
 
@@ -173,3 +175,12 @@ await myAuditSink.write(toAuditEntry(event));
 [umbrella]: https://www.npmjs.com/package/kalguard
 [sdk]: https://www.npmjs.com/package/kalguard-sdk
 [sidecar]: https://www.npmjs.com/package/kalguard-sidecar
+
+---
+
+<p align="center">
+  <img src="https://avatars.githubusercontent.com/u/281149417?s=96&v=4" width="28" />
+  <b>by Infrarix</b>
+</p>
+
+> Part of the **Infrarix AI Infrastructure ecosystem**

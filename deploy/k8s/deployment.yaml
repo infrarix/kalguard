@@ -61,11 +61,14 @@ spec:
               value: '/var/log/kalguard/audit.log'
             - name: NODE_ENV
               value: 'production'
-            - name: KALGUARD_TOKEN_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: kalguard-secrets
-                  key: token-secret
+            # KALGUARD_TOKEN_SECRET is deprecated when using Cloud.
+            # The sidecar auto-syncs the signing secret via KALGUARD_API_KEY.
+            # Uncomment for local-only mode:
+            # - name: KALGUARD_TOKEN_SECRET
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: kalguard-secrets
+            #       key: token-secret
           volumeMounts:
             - name: policy
               mountPath: /policy

@@ -1,19 +1,19 @@
-facebook:
-  label: Facebook
-  permalink: /facebook
-  description: Facebook tag description
+announcement:
+  label: Announcement
+  permalink: /announcement
+  description: Product announcements and releases
 
-hello:
-  label: Hello
-  permalink: /hello
-  description: Hello tag description
+security:
+  label: Security
+  permalink: /security
+  description: AI agent security topics
 
-docusaurus:
-  label: Docusaurus
-  permalink: /docusaurus
-  description: Docusaurus tag description
+release:
+  label: Release
+  permalink: /release
+  description: Version releases and changelogs
 
-hola:
-  label: Hola
-  permalink: /hola
-  description: Hola tag description
+engineering:
+  label: Engineering
+  permalink: /engineering
+  description: Engineering insights and deep dives

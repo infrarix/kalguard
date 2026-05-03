@@ -1,25 +1,10 @@
-/**
- * Copyright 2025 KalGuard Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import { readFile } from 'node:fs/promises';
 import { loadSidecarConfig, startPolicyWatch } from '../config/index.js';
 import { PolicyEngine, parsePolicyDocument, ToolMediator } from 'kalguard-core';
 import type { PolicyDocument, ToolAllowlistEntry } from 'kalguard-core';
 import { FileAuditLog, MemoryAuditLog } from '../storage/audit.js';
 import { createSidecarServer } from '../sidecar/server.js';
+import { KalGuardCloudClient, LicenseCache, CloudRateLimiter, UsageBuffer } from '../cloud/index.js';
 
 async function main(): Promise<void> {
   const config = loadSidecarConfig();
@@ -65,11 +50,64 @@ async function main(): Promise<void> {
 
   const auditLog = config.auditLogPath ? new FileAuditLog(config.auditLogPath) : new MemoryAuditLog();
 
+  // Cloud connector (Pro features) — only when API key is configured
+  let rateLimiter: CloudRateLimiter | undefined;
+  let licenseCache: LicenseCache | undefined;
+  let usageBuffer: UsageBuffer | undefined;
+
+  if (config.apiKey) {
+    const cloudClient = new KalGuardCloudClient(config.apiKey, config.cloudBaseUrl);
+    licenseCache = new LicenseCache(config.cloudSyncIntervalMs);
+
+    // Validate license on startup
+    const licenseInfo = await cloudClient.validateLicense();
+    licenseCache.set(licenseInfo);
+
+    if (licenseInfo.valid) {
+      console.log(`[kalguard] cloud connected: ${licenseInfo.tier} plan, org: ${licenseInfo.orgId}`);
+
+      // Rate limiter based on plan limits (-1 = unlimited)
+      rateLimiter = new CloudRateLimiter(licenseInfo.limits.checksPerDay, 86_400_000);
+
+      // Usage buffer: batch reports to cloud
+      usageBuffer = new UsageBuffer(cloudClient, 100, 30_000);
+      usageBuffer.start();
+
+      // Periodic license refresh
+      const refreshTimer = setInterval(async () => {
+        try {
+          const refreshed = await cloudClient.validateLicense();
+          licenseCache!.set(refreshed);
+          if (refreshed.valid && rateLimiter) {
+            rateLimiter.updateLimit(refreshed.limits.checksPerDay);
+          }
+          if (!refreshed.valid) {
+            console.warn('[kalguard] cloud license invalid on refresh — using cached plan');
+          }
+        } catch (err) {
+          console.error('[kalguard] license refresh failed:', err);
+        }
+      }, config.cloudSyncIntervalMs);
+
+      // Allow process to exit even if timer is active
+      if (refreshTimer && typeof refreshTimer === 'object' && 'unref' in refreshTimer) {
+        (refreshTimer as NodeJS.Timeout).unref();
+      }
+    } else {
+      console.warn('[kalguard] cloud license invalid — running in degraded mode');
+    }
+  } else {
+    console.log('[kalguard] running in local-only mode (no API key)');
+  }
+
   const server = createSidecarServer({
     config,
     policyEngine,
     toolMediator,
     auditLog,
+    rateLimiter,
+    licenseCache,
+    usageBuffer,
   });
 
   server.listen(config.port, config.host, () => {

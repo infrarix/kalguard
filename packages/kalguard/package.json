@@ -2,6 +2,7 @@
   "name": "kalguard",
   "version": "1.1.1",
   "description": "KalGuard - AI Agent Runtime Security Platform. Install this for the SDK (recommended entry point for agents).",
+  "author": "Infrarix",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -59,6 +60,5 @@
     "type": "git",
     "url": "git+https://github.com/infrarix/kalguard.git",
     "directory": "packages/kalguard"
-  },
-  "author": "KalGuard Contributors"
+  }
 }
