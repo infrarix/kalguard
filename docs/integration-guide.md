@@ -34,7 +34,7 @@ KalGuard never executes your LLM or tools; it only returns **allow** or **deny**
    Default: `http://localhost:9292`.
 
 2. **Agent token**  
-   Must be a short-lived token signed with the same secret as `KALGUARD_TOKEN_SECRET`.  
+   Must be a short-lived token generated from the KalGuard Dashboard (or signed locally with `KALGUARD_TOKEN_SECRET` in local-only mode).  
    See [Getting agent tokens](#getting-agent-tokens) below.
 
 3. **Policy allows your agent**  
@@ -182,33 +182,36 @@ async function runAgent(userInput: string) {
 
 ## Getting Agent Tokens
 
-Agents need a **short-lived token** signed with the same secret the sidecar uses (`KALGUARD_TOKEN_SECRET`). Agent identity is **separate** from user identity.
+Agents need a **short-lived token** to authenticate with the sidecar. Agent identity is **separate** from user identity.
 
-### Option 1: Issue tokens from your backend (recommended)
+### Option 1: Generate from the KalGuard Dashboard (recommended)
 
-Your auth service or API gateway issues a token per agent (or per session) and sets the same secret in the sidecar:
+1. Log in at [dashboard.kalguard.dev](https://dashboard.kalguard.dev)
+2. Navigate to **Access Tokens**
+3. Click **Create Token** — set a name, agent ID, capabilities, and expiry
+4. Copy the token (shown once) and set it as `KALGUARD_AGENT_TOKEN` in your agent's environment
+
+The sidecar automatically receives the signing secret from KalGuard Cloud when `KALGUARD_API_KEY` is set. No manual secret management required.
+
+### Option 2: Local-only mode (development)
+
+For local development without KalGuard Cloud, generate a secret and issue tokens manually:
 
 ```ts
-import { createAgentToken, generateAgentId } from 'kalguard-core';
+import { createAgentToken } from 'kalguard-core';
 
-const agentId = generateAgentId(); // or your stable agent ID
 const token = createAgentToken(
-  agentId,
-  ['prompt:send', 'tool:execute'], // capabilities
+  'my-agent',
+  ['prompt:send', 'tool:execute'],
   {
     secret: process.env.KALGUARD_TOKEN_SECRET!,
     issuer: 'https://your-platform.com',
     ttlSeconds: 3600,
   }
 );
-// Return token to the agent (e.g. in login response or env).
 ```
 
-Ensure your **policy** allows this `agentId` for `prompt:check` and `tool:execute` (see main README policy example).
-
-### Option 2: Single shared token for development
-
-For local/dev only, create one token and set it in the agent's env (e.g. `KALGUARD_AGENT_TOKEN`). Use the same secret in the sidecar. **Do not** use a shared long-lived token in production.
+Set the same secret on the sidecar via `KALGUARD_TOKEN_SECRET`. **Do not** use this approach in production — use dashboard-managed tokens instead.
 
 ---
 
@@ -272,7 +275,7 @@ Replace `agent_abc123` with the `agentId` (token `sub` claim) your agent uses. F
 ## Checklist
 
 - [ ] Sidecar running and reachable (e.g. `http://localhost:9292`, or your deployment URL).
-- [ ] Agent has a token signed with `KALGUARD_TOKEN_SECRET` and policy allows its `agentId` for `prompt:check` and `tool:execute`.
+- [ ] Agent has a valid access token (from the dashboard or local `KALGUARD_TOKEN_SECRET`) and policy allows its `agentId` for `prompt:check` and `tool:execute`.
 - [ ] Before **every** LLM call: call `POST /v1/prompt/check` (or `withPromptCheck`); if denied, do not call the LLM.
 - [ ] Before **every** tool call: call `POST /v1/tool/check` (or `withToolCheck`); if denied, do not run the tool.
 - [ ] Use sanitized messages when KalGuard returns them in the prompt-check response.

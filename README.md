@@ -62,7 +62,8 @@ pnpm install
 pnpm run build
 pnpm start
 # Or run sidecar package only: pnpm --filter kalguard-sidecar start
-# Optional: set KALGUARD_TOKEN_SECRET, KALGUARD_POLICY_PATH, KALGUARD_AUDIT_LOG_PATH
+# Optional: set KALGUARD_POLICY_PATH, KALGUARD_AUDIT_LOG_PATH
+# Access tokens are managed via the KalGuard Dashboard (https://dashboard.kalguard.dev)
 ```
 
 Sidecar listens on `http://0.0.0.0:9292` by default. Endpoints:
@@ -100,7 +101,7 @@ See **[Integration guide](docs/integration-guide.md)** for step-by-step integrat
 
 ### 4. Agent tokens
 
-Use the provided token utilities to issue short-lived agent tokens (`import { createAgentToken } from 'kalguard-core'`). Tokens are signed with HMAC-SHA256; set `KALGUARD_TOKEN_SECRET` on the sidecar to verify.
+Agent access tokens are created in the **KalGuard Dashboard** (Dashboard → Access Tokens). Set a name, agent ID, capabilities, and expiry — the dashboard generates a signed JWT. When the sidecar is connected to KalGuard Cloud (`KALGUARD_API_KEY`), it automatically receives the signing secret. For local-only mode, set `KALGUARD_TOKEN_SECRET` manually.
 
 ## Monorepo (pnpm + Turbo)
 
@@ -142,7 +143,7 @@ test/                # Unit tests (run from repo root; see test/README or packag
 |----------|-------------|---------|
 | `KALGUARD_PORT` | Sidecar port | 9292 |
 | `KALGUARD_HOST` | Bind host | 0.0.0.0 |
-| `KALGUARD_TOKEN_SECRET` | Secret for token verification | (optional; no signature check if unset) |
+| `KALGUARD_TOKEN_SECRET` | Secret for token verification (local-only mode; deprecated when using Cloud) | (auto-synced from dashboard when `KALGUARD_API_KEY` is set) |
 | `KALGUARD_POLICY_PATH` | Path to policy JSON file | (default policy: deny all) |
 | `KALGUARD_POLICY_DEFAULT_DENY` | Default policy decision when no file | true |
 | `KALGUARD_POLICY_WATCH` | Hot-reload policy on file change | false |
@@ -151,6 +152,9 @@ test/                # Unit tests (run from repo root; see test/README or packag
 | `KALGUARD_PROMPT_SANITIZE_THRESHOLD` | Prompt risk score sanitize threshold | 50 |
 | `KALGUARD_TOOL_RATE_LIMIT` | Tool requests per agent per minute | (no limit) |
 | `KALGUARD_AUDIT_LOG_PATH` | File path for audit log | (memory-only if unset) |
+| `KALGUARD_API_KEY` | KalGuard Cloud API key (enables Pro features) | (local-only if unset) |
+| `KALGUARD_CLOUD_URL` | KalGuard Cloud API base URL | `https://api.kalguard.dev` |
+| `KALGUARD_CLOUD_SYNC_INTERVAL_MS` | License refresh interval (ms) | 300000 (5 min) |
 
 ## Policy format (JSON)
 
@@ -202,6 +206,52 @@ First matching rule wins. Fail closed: no policy or error → deny.
 - [Sandbox](packages/sidecar/src/sandbox/README.md)
 - [Example: simple agent](examples/simple-agent/README.md)
 
+## KalGuard Cloud (Pro & Enterprise)
+
+KalGuard is fully functional as an open-source, self-hosted solution. For teams that need more, **KalGuard Cloud** adds centralized management, usage analytics, and higher limits.
+
+| Feature | Free (OSS) | Pro ($49/mo) | Enterprise |
+|---------|-----------|-------------|------------|
+| Security checks/day | 1,000 | 100,000 | Unlimited |
+| Agents | 1 | Unlimited | Unlimited |
+| Audit retention | 7 days | 90 days | 365 days |
+| Prompt firewall | Basic | Advanced + PII redaction | Advanced + PII |
+| Usage analytics | — | Dashboard | Dashboard |
+| Custom policy rules | — | Yes | Yes |
+| SSO / SAML | — | — | Yes |
+| SLA | — | — | Yes |
+
+### Connect to Cloud
+
+1. Sign up at [dashboard.kalguard.dev](https://dashboard.kalguard.dev) and create an organization.
+2. Generate an API key from the dashboard.
+3. Set the environment variable on your sidecar:
+
+```bash
+export KALGUARD_API_KEY=kg_live_your_api_key_here
+```
+
+The sidecar will automatically validate your license, enforce plan limits, and report usage to the dashboard. No code changes required — the same sidecar binary works in local-only and cloud-connected modes.
+
+### Cloud Response Headers
+
+When connected to KalGuard Cloud, every sidecar response includes:
+
+| Header | Description |
+|--------|-------------|
+| `x-kalguard-plan` | Current plan tier (`free`, `pro`, `enterprise`) |
+| `x-kalguard-usage-remaining` | Remaining checks for the day |
+| `x-ratelimit-reset` | Unix timestamp when the limit resets |
+
 ## License
 
 Apache-2.0. See [LICENSE](LICENSE).
+
+---
+
+<p align="center">
+  <img src="https://avatars.githubusercontent.com/u/281149417?s=96&v=4" width="28" />
+  <b>by Infrarix</b>
+</p>
+
+> Part of the **Infrarix AI Infrastructure ecosystem**

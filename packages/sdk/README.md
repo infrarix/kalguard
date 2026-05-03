@@ -137,3 +137,12 @@ Treat denials as **terminal** — never silently fall through to an unguarded pa
 ## License
 
 [Apache-2.0](https://github.com/infrarix/kalguard/blob/main/LICENSE) © KalGuard Contributors
+
+---
+
+<p align="center">
+  <img src="https://avatars.githubusercontent.com/u/281149417?s=96&v=4" width="28" />
+  <b>by Infrarix</b>
+</p>
+
+> Part of the **Infrarix AI Infrastructure ecosystem**

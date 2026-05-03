@@ -25,7 +25,8 @@ This example shows how to integrate KalGuard into a minimal Node.js agent using 
 From **repo root** (so `kalguard` resolves from the workspace):
 
 ```bash
-# Issue a token for agent-1 (using kalguard-core; run from repo root after pnpm install)
+# For production, generate tokens from the KalGuard Dashboard instead.
+# This inline token creation is for local development only.
 export KALGUARD_AGENT_TOKEN=$(node --input-type=module -e "
 const m = await import('kalguard-core');
 console.log(m.createAgentToken('agent-1', ['prompt:send', 'tool:execute'], { secret: 'dev-secret', expiresInMs: 3600000 }));

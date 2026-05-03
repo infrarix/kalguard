@@ -1,21 +1,5 @@
-/**
- * Copyright 2025 KalGuard Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
-import { randomBytes } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import type { SidecarConfig } from '../config/schema.js';
 import { validateAgentToken, checkCapability } from 'kalguard-core';
 import type { AgentIdentity } from 'kalguard-core';
@@ -27,6 +11,10 @@ import { ToolMediator } from 'kalguard-core';
 import { createSecurityEvent, toAuditEntry } from 'kalguard-core';
 import type { IAuditLog } from '../storage/audit.js';
 import { securityResponse, jsonResponse } from '../api/response.js';
+import type { CloudRateLimiter } from '../cloud/rate-limiter.js';
+import type { LicenseCache } from '../cloud/license-cache.js';
+import type { UsageBuffer } from '../cloud/usage-buffer.js';
+import type { UsageEvent } from '../cloud/types.js';
 
 /** Request ID header; agents must not trust it for auth. */
 const REQUEST_ID_HEADER = 'x-kalguard-request-id';
@@ -37,6 +25,12 @@ export interface SidecarDeps {
   policyEngine: PolicyEngine;
   toolMediator: ToolMediator;
   auditLog: IAuditLog;
+  /** Cloud rate limiter — present only when KALGUARD_API_KEY is set. */
+  rateLimiter?: CloudRateLimiter;
+  /** Cloud license cache — present only when KALGUARD_API_KEY is set. */
+  licenseCache?: LicenseCache;
+  /** Cloud usage buffer — present only when KALGUARD_API_KEY is set. */
+  usageBuffer?: UsageBuffer;
 }
 
 /**
@@ -44,12 +38,78 @@ export interface SidecarDeps {
  * Fail closed on any policy/auth error.
  */
 export function createSidecarServer(deps: SidecarDeps) {
-  const { config, policyEngine, toolMediator, auditLog } = deps;
-  const tokenSecret = config.tokenSecret;
+  const { config, policyEngine, toolMediator, auditLog, rateLimiter, licenseCache, usageBuffer } = deps;
+  const envTokenSecret = config.tokenSecret;
+  let cloudSecretWarningLogged = false;
+
+  /**
+   * Resolve the token signing secret.
+   * Priority: cloud-synced secret > KALGUARD_TOKEN_SECRET env var > null (decode-only).
+   */
+  function getTokenSecret(): string | undefined {
+    if (licenseCache) {
+      const license = licenseCache.get();
+      if (license?.valid && license.tokenSigningSecret) {
+        if (envTokenSecret && !cloudSecretWarningLogged) {
+          console.warn(
+            '[kalguard] KALGUARD_TOKEN_SECRET env var is set but cloud-provided signing secret is active. Using cloud secret. Remove KALGUARD_TOKEN_SECRET to suppress this warning.',
+          );
+          cloudSecretWarningLogged = true;
+        }
+        return license.tokenSigningSecret;
+      }
+    }
+    return envTokenSecret;
+  }
+
+  /** Check if a token has been revoked (by hash). */
+  function isTokenRevoked(token: string): boolean {
+    if (!licenseCache) return false;
+    const license = licenseCache.get();
+    if (!license?.revokedTokenHashes?.length) return false;
+    const hash = createHash('sha256').update(token).digest('hex');
+    return license.revokedTokenHashes.includes(hash);
+  }
+
+  /** Add cloud plan headers to response if cloud is connected. */
+  function setCloudHeaders(res: ServerResponse): void {
+    if (licenseCache) {
+      const license = licenseCache.get();
+      if (license?.valid) {
+        res.setHeader('x-kalguard-plan', license.tier);
+      }
+    }
+    if (rateLimiter) {
+      const rl = rateLimiter.check();
+      if (rl.remaining >= 0) {
+        res.setHeader('x-kalguard-usage-remaining', String(rl.remaining));
+        res.setHeader('x-ratelimit-reset', String(Math.ceil(rl.resetAt / 1000)));
+      }
+    }
+  }
+
+  /** Push a usage event to the cloud buffer (fire-and-forget). */
+  function reportUsage(
+    eventType: 'prompt_check' | 'tool_check',
+    agentId: string,
+    decision: string,
+    requestId: string,
+  ): void {
+    if (!usageBuffer) return;
+    const event: UsageEvent = {
+      eventType,
+      agentId,
+      decision,
+      requestId,
+      timestamp: new Date().toISOString(),
+    };
+    usageBuffer.push(event);
+  }
 
   async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise<void> {
     const requestId = (req.headers[REQUEST_ID_HEADER] as string) ?? `req_${randomBytes(12).toString('hex')}`;
     res.setHeader(REQUEST_ID_HEADER, requestId);
+    setCloudHeaders(res);
 
     try {
       const authHeader = req.headers[AUTH_HEADER];
@@ -57,6 +117,20 @@ export function createSidecarServer(deps: SidecarDeps) {
         typeof authHeader === 'string' && authHeader.toLowerCase().startsWith('bearer ')
           ? authHeader.slice(7).trim()
           : undefined;
+
+      // Check revocation before signature validation
+      if (token && isTokenRevoked(token)) {
+        const evt = createSecurityEvent('auth_failure', 'anonymous', requestId, { reason: 'token revoked' });
+        await auditLog.append(toAuditEntry(evt));
+        jsonResponse(
+          res,
+          401,
+          securityResponse(false, requestId, { message: 'Token revoked', errorCode: 'TOKEN_REVOKED' }),
+        );
+        return;
+      }
+
+      const tokenSecret = getTokenSecret();
       const identity = token
         ? validateAgentToken(token, tokenSecret != null ? { nowMs: Date.now(), secret: tokenSecret } : Date.now())
         : null;
@@ -75,16 +149,65 @@ export function createSidecarServer(deps: SidecarDeps) {
       const url = req.url ?? '/';
       const method = req.method ?? 'GET';
 
+      // Cloud rate limit check (before any processing)
+      if (rateLimiter && method === 'POST') {
+        const rl = rateLimiter.check();
+        if (!rl.allowed) {
+          const evt = createSecurityEvent('policy_deny', identity.agentId, requestId, {
+            reason: 'cloud rate limit exceeded',
+          });
+          await auditLog.append(toAuditEntry(evt));
+          res.setHeader('retry-after', String(Math.ceil((rl.resetAt - Date.now()) / 1000)));
+          jsonResponse(
+            res,
+            429,
+            securityResponse(false, requestId, {
+              message: 'Rate limit exceeded',
+              errorCode: 'RATE_LIMIT_EXCEEDED',
+              data: { remaining: 0, resetAt: rl.resetAt },
+            }),
+          );
+          return;
+        }
+      }
+
       if (method === 'POST' && (url === '/v1/llm/check' || url === '/v1/prompt/check')) {
-        await handlePromptCheck(req, res, identity, requestId, auditLog, policyEngine, config);
+        await handlePromptCheck(
+          req,
+          res,
+          identity,
+          requestId,
+          auditLog,
+          policyEngine,
+          config,
+          rateLimiter,
+          reportUsage,
+        );
         return;
       }
       if (method === 'POST' && url === '/v1/tool/check') {
-        await handleToolCheck(req, res, identity, requestId, auditLog, policyEngine, toolMediator);
+        await handleToolCheck(
+          req,
+          res,
+          identity,
+          requestId,
+          auditLog,
+          policyEngine,
+          toolMediator,
+          rateLimiter,
+          reportUsage,
+        );
         return;
       }
       if (method === 'GET' && url === '/health') {
-        jsonResponse(res, 200, { status: 'ok', requestId });
+        const healthData: Record<string, unknown> = { status: 'ok', requestId };
+        if (licenseCache) {
+          const license = licenseCache.get();
+          healthData.cloud = license
+            ? { connected: true, tier: license.tier, orgId: license.orgId }
+            : { connected: false };
+        }
+        jsonResponse(res, 200, healthData);
         return;
       }
 
@@ -122,6 +245,13 @@ async function handlePromptCheck(
   auditLog: IAuditLog,
   policyEngine: PolicyEngine,
   config: SidecarConfig,
+  rateLimiter?: CloudRateLimiter,
+  reportUsage?: (
+    eventType: 'prompt_check' | 'tool_check',
+    agentId: string,
+    decision: string,
+    requestId: string,
+  ) => void,
 ): Promise<void> {
   const cap = checkCapability(identity, 'prompt:send');
   if (!cap.allowed) {
@@ -224,6 +354,8 @@ async function handlePromptCheck(
       metadata: { riskScore: firewallResult.riskScore, injectionDetected: firewallResult.injectionDetected },
     });
     await auditLog.append(toAuditEntry(evt));
+    if (rateLimiter) rateLimiter.increment();
+    reportUsage?.('prompt_check', identity.agentId, 'deny', requestId);
     jsonResponse(
       res,
       403,
@@ -240,6 +372,8 @@ async function handlePromptCheck(
     metadata: { riskScore: firewallResult.riskScore, sanitized: firewallResult.sanitizedMessages != null },
   });
   await auditLog.append(toAuditEntry(evt));
+  if (rateLimiter) rateLimiter.increment();
+  reportUsage?.('prompt_check', identity.agentId, 'allow', requestId);
   jsonResponse(
     res,
     200,
@@ -264,6 +398,13 @@ async function handleToolCheck(
   auditLog: IAuditLog,
   policyEngine: PolicyEngine,
   toolMediator: ToolMediator,
+  rateLimiter?: CloudRateLimiter,
+  reportUsage?: (
+    eventType: 'prompt_check' | 'tool_check',
+    agentId: string,
+    decision: string,
+    requestId: string,
+  ) => void,
 ): Promise<void> {
   const cap = checkCapability(identity, 'tool:execute');
   if (!cap.allowed) {
@@ -365,6 +506,8 @@ async function handleToolCheck(
       ...(mediation.reason !== undefined ? { reason: mediation.reason } : {}),
     });
     await auditLog.append(toAuditEntry(evt));
+    if (rateLimiter) rateLimiter.increment();
+    reportUsage?.('tool_check', identity.agentId, 'deny', requestId);
     jsonResponse(
       res,
       403,
@@ -377,6 +520,8 @@ async function handleToolCheck(
     metadata: { toolName: inv.toolName },
   });
   await auditLog.append(toAuditEntry(evt));
+  if (rateLimiter) rateLimiter.increment();
+  reportUsage?.('tool_check', identity.agentId, 'allow', requestId);
   jsonResponse(
     res,
     200,

@@ -62,6 +62,28 @@ KalGuard treats every agent as **untrusted by default** and enforces five design
 - **Multi-tenant platforms** — isolate agent capabilities per customer or environment.
 - **Development & testing** — sandbox agent behavior before promoting to production.
 
+## Free vs. Cloud (Pro & Enterprise)
+
+KalGuard is **fully functional** as an open-source, self-hosted solution. For teams that need centralized management, higher limits, and advanced features, **KalGuard Cloud** adds a managed dashboard layer.
+
+| Capability | Free (OSS) | Pro ($49/mo) | Enterprise |
+|-----------|-----------|-------------|------------|
+| Security checks/day | 1,000 | 100,000 | Unlimited |
+| Agents | 1 | Unlimited | Unlimited |
+| Audit retention | 7 days | 90 days | 365 days |
+| Prompt firewall | Basic | Advanced + PII redaction | Advanced + PII |
+| Usage analytics | — | Dashboard | Dashboard |
+| Custom policy rules | — | Yes | Yes |
+| SSO / SAML / SLA | — | — | Yes |
+
+To connect your sidecar to KalGuard Cloud, set a single environment variable:
+
+```bash
+export KALGUARD_API_KEY=kg_live_your_api_key_here
+```
+
+See **[KalGuard Cloud](/docs/cloud)** for details.
+
 ## What's Next?
 
 - **[Quick Start](/docs/quick-start)** — get KalGuard running in five minutes.

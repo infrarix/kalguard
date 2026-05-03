@@ -31,7 +31,7 @@ docker run -d \
   --name kalguard \
   --restart unless-stopped \
   -p 9292:9292 \
-  -e KALGUARD_TOKEN_SECRET="$TOKEN_SECRET" \
+  -e KALGUARD_API_KEY="$KALGUARD_API_KEY" \
   -v "$(pwd)/policy.json:/policy/policy.json:ro" \
   -v "$(pwd)/audit:/var/log/kalguard" \
   kalguard/sidecar:latest
@@ -48,7 +48,7 @@ services:
     ports:
       - "9292:9292"
     environment:
-      KALGUARD_TOKEN_SECRET: "${TOKEN_SECRET}"
+      KALGUARD_API_KEY: "${KALGUARD_API_KEY}"
       KALGUARD_POLICY_PATH: /policy/policy.json
       KALGUARD_AUDIT_LOG_PATH: /var/log/kalguard/audit.log
       KALGUARD_POLICY_WATCH: "true"
@@ -176,7 +176,17 @@ Never hard-code `KALGUARD_TOKEN_SECRET` in source code, Dockerfiles, or CI/CD co
 
 ```bash
 curl -f http://localhost:9292/health
-# {"status":"healthy","uptime":12345}
+# {"status":"ok","requestId":"req_..."}
+```
+
+When connected to KalGuard Cloud, the health endpoint also returns:
+
+```json
+{
+  "status": "ok",
+  "requestId": "req_...",
+  "cloud": { "connected": true, "tier": "pro", "orgId": "..." }
+}
 ```
 
 Configure your orchestrator to check this endpoint:
@@ -231,6 +241,42 @@ spec:
 - **Policy files**: Store in version control. Redeploy from git on recovery.
 - **Audit logs**: Rotate with `logrotate` or ship to durable storage (S3, GCS).
 - **Sidecar state**: None — sidecars are stateless and can be replaced immediately.
+
+## KalGuard Cloud Integration
+
+To connect your production sidecar to KalGuard Cloud for usage analytics, plan enforcement, and centralized management:
+
+```bash
+# Add to your sidecar environment
+KALGUARD_API_KEY=kg_live_your_api_key_here
+```
+
+In Kubernetes, store the API key in a Secret:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kalguard-cloud
+type: Opaque
+stringData:
+  api-key: kg_live_your_api_key_here
+```
+
+Reference it in the deployment:
+
+```yaml
+env:
+  - name: KALGUARD_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: kalguard-cloud
+        key: api-key
+```
+
+The sidecar will validate its license on startup, enforce plan limits, and report usage to the dashboard. If the Cloud API is unreachable, the sidecar continues in local-only mode.
+
+See [KalGuard Cloud](/docs/cloud) for plan details and dashboard features.
 
 ## Next Steps
 

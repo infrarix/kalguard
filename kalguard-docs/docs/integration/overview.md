@@ -127,7 +127,7 @@ curl -X POST http://localhost:9292/v1/tool/check \
   -H "Content-Type: application/json" \
   -d '{
     "toolName": "search_web",
-    "toolArgs": { "query": "weather NYC" }
+    "arguments": { "query": "weather NYC" }
   }'
 ```
 
@@ -149,7 +149,7 @@ def check_prompt(messages: list[dict]) -> list[dict]:
     return body.get("data", {}).get("sanitizedMessages", messages)
 
 def check_tool(name: str, args: dict) -> None:
-    r = requests.post(f"{BASE}/v1/tool/check", headers=HEADERS, json={"toolName": name, "toolArgs": args})
+    r = requests.post(f"{BASE}/v1/tool/check", headers=HEADERS, json={"toolName": name, "arguments": args})
     r.raise_for_status()
     body = r.json()
     if not body["allowed"]:

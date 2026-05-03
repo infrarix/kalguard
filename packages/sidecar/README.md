@@ -214,3 +214,12 @@ The sandbox runner executes tool commands with a timeout, an allowlisted environ
 [umbrella]: https://www.npmjs.com/package/kalguard
 [sdk]: https://www.npmjs.com/package/kalguard-sdk
 [core]: https://www.npmjs.com/package/kalguard-core
+
+---
+
+<p align="center">
+  <img src="https://avatars.githubusercontent.com/u/281149417?s=96&v=4" width="28" />
+  <b>by Infrarix</b>
+</p>
+
+> Part of the **Infrarix AI Infrastructure ecosystem**

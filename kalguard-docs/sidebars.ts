@@ -10,6 +10,7 @@ const sidebars: SidebarsConfig = {
         'introduction',
         'quick-start',
         'installation',
+        'cloud',
       ],
     },
     {

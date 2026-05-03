@@ -2,6 +2,7 @@
   "name": "kalguard-core",
   "version": "1.1.1",
   "description": "KalGuard core - types, policy engine, agent identity, prompt firewall, tool mediation",
+  "author": "Infrarix",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -52,6 +53,5 @@
     "type": "git",
     "url": "git+https://github.com/infrarix/kalguard.git",
     "directory": "packages/core"
-  },
-  "author": "KalGuard Contributors"
+  }
 }

@@ -1,25 +1,26 @@
-/**
- * Copyright 2025 KalGuard Contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import type { SecurityResponse, PromptMessage } from 'kalguard-core';
 
 export interface KalGuardClientOptions {
   readonly baseUrl: string;
   readonly token: string;
   readonly requestId?: string;
+}
+
+/** Plan info returned by cloud-connected sidecar via response headers. */
+export interface KalGuardPlanInfo {
+  readonly plan: string;
+  readonly remaining: number;
+  readonly resetAt: number;
+}
+
+function parsePlanHeaders(headers: Headers): KalGuardPlanInfo | undefined {
+  const plan = headers.get('x-kalguard-plan');
+  if (!plan) return undefined;
+  return {
+    plan,
+    remaining: Number(headers.get('x-kalguard-usage-remaining') ?? -1),
+    resetAt: Number(headers.get('x-ratelimit-reset') ?? 0),
+  };
 }
 
 /**
@@ -35,6 +36,13 @@ export class KalGuardClient {
     this.token = options.token;
     if (!this.token) throw new Error('KalGuardClient requires token');
   }
+
+  /** Last plan info received from sidecar (populated after each request). */
+  get planInfo(): KalGuardPlanInfo | undefined {
+    return this._planInfo;
+  }
+
+  private _planInfo: KalGuardPlanInfo | undefined;
 
   /**
    * Check prompt with sidecar (prompt firewall + policy). Use sanitized messages if returned.
@@ -60,6 +68,7 @@ export class KalGuardClient {
       },
       body: JSON.stringify({ messages }),
     });
+    this._planInfo = parsePlanHeaders(res.headers);
     const data = (await res.json()) as SecurityResponse<{
       allowed: boolean;
       riskScore?: number;
@@ -87,6 +96,7 @@ export class KalGuardClient {
       },
       body: JSON.stringify({ toolName, arguments: args }),
     });
+    this._planInfo = parsePlanHeaders(res.headers);
     const data = (await res.json()) as SecurityResponse<{ allowed: boolean }>;
     return data;
   }
