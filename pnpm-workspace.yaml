@@ -1,4 +1,0 @@
-# KalGuard monorepo - pnpm workspace
-# https://pnpm.io/workspaces
-packages:
-  - 'packages/*'

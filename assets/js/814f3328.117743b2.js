@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkalguard_docs=self.webpackChunkkalguard_docs||[]).push([["833"],{5513(a){a.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"Introducing KalGuard","permalink":"/kalguard/blog/introducing-kalguard","unlisted":false,"date":"2024-01-15T00:00:00.000Z"}]}')}}]);

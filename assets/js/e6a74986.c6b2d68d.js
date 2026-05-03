@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkalguard_docs=self.webpackChunkkalguard_docs||[]).push([["270"],{6153(a){a.exports=JSON.parse('{"metadata":{"permalink":"/kalguard/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);

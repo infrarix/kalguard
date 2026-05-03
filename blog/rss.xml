@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="rss.xsl"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>KalGuard Blog</title>
+        <link>https://infrarix.github.io/kalguard/blog</link>
+        <description>KalGuard Blog</description>
+        <lastBuildDate>Mon, 15 Jan 2024 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>en</language>
+        <item>
+            <title><![CDATA[Introducing KalGuard]]></title>
+            <link>https://infrarix.github.io/kalguard/blog/introducing-kalguard</link>
+            <guid>https://infrarix.github.io/kalguard/blog/introducing-kalguard</guid>
+            <pubDate>Mon, 15 Jan 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[We're excited to announce KalGuard, an open-source, framework-agnostic security platform for AI agents.]]></description>
+            <content:encoded><![CDATA[<p>We're excited to announce <strong>KalGuard</strong>, an open-source, framework-agnostic security platform for AI agents.</p>
+<!-- -->
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-problem">The Problem<a href="https://infrarix.github.io/kalguard/blog/introducing-kalguard#the-problem" class="hash-link" aria-label="Direct link to The Problem" title="Direct link to The Problem" translate="no">​</a></h2>
+<p>AI agents are powerful but introduce unique security challenges:</p>
+<ul>
+<li class=""><strong>Prompt injection attacks</strong> — malicious inputs that hijack agent behavior</li>
+<li class=""><strong>Uncontrolled tool access</strong> — agents executing dangerous operations without authorization</li>
+<li class=""><strong>Lack of audit trails</strong> — no visibility into what agents actually did</li>
+<li class=""><strong>Difficult to enforce policies</strong> — security rules scattered across application code</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-solution">The Solution<a href="https://infrarix.github.io/kalguard/blog/introducing-kalguard#the-solution" class="hash-link" aria-label="Direct link to The Solution" title="Direct link to The Solution" translate="no">​</a></h2>
+<p>KalGuard provides a <strong>zero-trust, fail-closed security layer</strong> that sits between your agent and the outside world:</p>
+<ul>
+<li class=""><strong>Prompt Firewall</strong> — Detect and sanitize malicious prompts before they reach the LLM</li>
+<li class=""><strong>Tool Mediation</strong> — Control exactly which tools agents can execute, with what arguments</li>
+<li class=""><strong>Policy Engine</strong> — Declarative, composable security policies with hot-reload support</li>
+<li class=""><strong>Agent Identity</strong> — JWT-based authentication and per-agent authorization</li>
+<li class=""><strong>Immutable Audit Logging</strong> — Append-only, signed audit trail for every decision</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="architecture">Architecture<a href="https://infrarix.github.io/kalguard/blog/introducing-kalguard#architecture" class="hash-link" aria-label="Direct link to Architecture" title="Direct link to Architecture" translate="no">​</a></h2>
+<p>KalGuard runs as a <strong>sidecar process</strong> — not embedded in your agent. This means:</p>
+<ul>
+<li class="">Works with <strong>any framework</strong> (LangChain, AutoGPT, custom agents)</li>
+<li class="">Simple HTTP API or TypeScript SDK integration</li>
+<li class="">Deploy alongside your agent in Docker, Kubernetes, or bare metal</li>
+<li class="">No vendor lock-in — swap it out without changing your agent code</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="free--cloud-options">Free &amp; Cloud Options<a href="https://infrarix.github.io/kalguard/blog/introducing-kalguard#free--cloud-options" class="hash-link" aria-label="Direct link to Free &amp; Cloud Options" title="Direct link to Free &amp; Cloud Options" translate="no">​</a></h2>
+<p>KalGuard is fully functional as a <strong>free, self-hosted</strong> open-source project. For teams that need more, <strong>KalGuard Cloud</strong> adds managed rate limiting, usage analytics, and extended audit retention through a simple API key.</p>
+<table><thead><tr><th>Feature</th><th>Free (OSS)</th><th>Cloud Pro</th></tr></thead><tbody><tr><td>Policy Engine</td><td>Full</td><td>Full</td></tr><tr><td>Prompt Firewall</td><td>Full</td><td>Full</td></tr><tr><td>Rate Limiting</td><td>Manual config</td><td>Cloud-managed</td></tr><tr><td>Audit Retention</td><td>Local storage</td><td>90-day cloud</td></tr><tr><td>Checks/day</td><td>Unlimited (self-hosted)</td><td>100K</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="get-started">Get Started<a href="https://infrarix.github.io/kalguard/blog/introducing-kalguard#get-started" class="hash-link" aria-label="Direct link to Get Started" title="Direct link to Get Started" translate="no">​</a></h2>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token function" style="color:#d73a49">pnpm</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">add</span><span class="token plain"> kalguard</span><br></div></code></pre></div></div>
+<p>Check out the <a class="" href="https://infrarix.github.io/kalguard/docs/quick-start">Quick Start Guide</a> to get started, or read the <a class="" href="https://infrarix.github.io/kalguard/docs/cloud">Cloud documentation</a> for managed features.</p>]]></content:encoded>
+            <category>Announcement</category>
+            <category>Security</category>
+        </item>
+    </channel>
+</rss>

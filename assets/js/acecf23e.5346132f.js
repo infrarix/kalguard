@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkalguard_docs=self.webpackChunkkalguard_docs||[]).push([["220"],{1912(a){a.exports=JSON.parse('{"blogBasePath":"/kalguard/blog","blogTitle":"Blog","authorsListPath":"/kalguard/blog/authors"}')}}]);
